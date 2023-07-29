@@ -6,7 +6,7 @@
 - 合并两个文件夹下的内容，覆盖补丁目录的文件后即可点击 RainbowSix.exe 启动游戏游玩！
 
 ## 在补丁文件CODEX.ini中UserName = 和 GameName = 后面可修改用户名游戏名
-# 存档保存位置%SystemDrive%\Users\Public\Documents\uPlay\CODEX\Saves
+## 存档保存位置%SystemDrive%\Users\Public\Documents\uPlay\CODEX\Saves
 
 # Y1S0 Vanilla 1.0 初代 | 14.2 GB -- 补丁目录：Plazas\PLAZA_BO
 - download_depot 359550 377237 8358812283631269928
