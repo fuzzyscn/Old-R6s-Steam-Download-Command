@@ -1,9 +1,9 @@
 # Old-R6s-Steam-Download-Command
 所有旧版彩虹六号steam下载命令
-Win+R 运行框输入冒号后命令启动steam控制台：steam://open/console
-控制台运行download_depot开头的命令即可下载以下旧版本彩虹六号，速度非常快！
-下载前需确认空间足够，下载文件的位置在Steam安装目录下\steamapps\content\app_359550\377237和359551里面，
-合并两个文件夹下的内容，覆盖补丁目录的文件后即可点击 RainbowSix.exe 启动游戏游玩！
+- Win+R 运行框输入冒号后命令启动steam控制台：steam://open/console
+- 控制台运行download_depot开头的命令即可下载以下旧版本彩虹六号，速度非常快！
+- 下载前需确认空间足够，下载文件的位置在Steam安装目录下\steamapps\content\app_359550\377237和359551里面，
+- 合并两个文件夹下的内容，覆盖补丁目录的文件后即可点击 RainbowSix.exe 启动游戏游玩！
 
 在补丁文件CODEX.ini中UserName = 和 GameName = 后面可修改用户名游戏名
 存档保存位置%SystemDrive%\Users\Public\Documents\uPlay\CODEX\Saves
