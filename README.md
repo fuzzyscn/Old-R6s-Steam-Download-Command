@@ -63,3 +63,29 @@
 # Y4S1 Burnt Horizon 4.1.0.2 (彩虹魔法愚人节活动) 燃烧地平线 | 59.7 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 8356277316976403078
 - download_depot 359550 359551 5935578581006804383
+
+# Y4S2 Phantom Sight 4.2.0 (Showdown) | 67.1 GB -- 补丁目录：Plazas\PLAZA_NEW
+- download_depot 359550 377237 693082837425613508
+- download_depot 359550 359551 5408324128694463720
+
+# Y4S3 Ember Rise 4.3.3.1 (Doktor's Curse/Money Heist) | 69.6 GB -- 补丁目录：Plazas\PLAZA_NEW
+- download_depot 359550 377237 3546781236735558235
+- download_depot 359550 359551 7869081741739849703
+
+# Y4S4 Shifting Tides 4.4.0 (Stadium) | 75.2 GB -- 补丁目录：Plazas\PLAZA_NEW
+- download_depot 359550 377237 299124516841461614
+- download_depot 359550 359551 1842268638395240106
+
+# Y5S1 Void Edge 5.1.2 (The Grand Larceny/Golden Gun) | 74.3 GB -- 补丁目录：Plazas\PLAZA_NEW
+- download_depot 359550 377237 4736360397583523381
+- download_depot 359550 359551 6296533808765702678
+
+# Y5S2 Steel Wave 5.2.3 (M.U.T.E. Protocol) | 81.3 GB -- 补丁目录：Plazas\PLAZA_NEW
+- download_depot 359550 377237 4367817844736324940
+- download_depot 359550 359551 893971391196952070
+
+# Y5S3 Shadow Legacy (Sugar Fright) 此版本使用 Lumaplay！确保您启动的是 Lumaplay.exe，而不是普通的 RainbowSix.exe！此版本使用更新后的机枪! -- 补丁目录：Plazas\LumaPlay
+- download_depot 359550 377237 85893637567200342
+- download_depot 359550 359551 3089981610366186823
+
+## 未完待续...
