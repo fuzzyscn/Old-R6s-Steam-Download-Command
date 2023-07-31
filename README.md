@@ -52,7 +52,7 @@
 - download_depot 359550 377237 6507886921175556869
 - download_depot 359550 359551 8765715607275074515
 
-## Y3S3 Grim Sky 3.3.2 (万圣节活动) 暗空行动 | 72.6 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y3S3 Grim Sky 3.3.2 (万圣节疯狂豪宅活动) 暗空行动 | 72.6 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 5562094852451837435
 - download_depot 359550 359551 7781202564071310413
 
@@ -84,7 +84,7 @@
 - download_depot 359550 377237 4367817844736324940
 - download_depot 359550 359551 893971391196952070
 
-## Y5S3 Shadow Legacy (糖果恐惧) 暗影传承行动 此版本使用 Lumaplay 补丁！确保您启动的是 Lumaplay.exe，而不是RainbowSix.exe！此版本有更新后的机枪! -- 补丁目录：Plazas\LumaPlay
+## Y5S3 Shadow Legacy (慌糖惊魂夜) 暗影传承行动 此版本使用 Lumaplay 补丁！确保您启动的是 Lumaplay.exe，而不是RainbowSix.exe！此版本有更新后的机枪! -- 补丁目录：Plazas\LumaPlay
 - download_depot 359550 377237 85893637567200342
 - download_depot 359550 359551 3089981610366186823
 
@@ -100,12 +100,32 @@
 - download_depot 359550 377237 8733653062998518164
 - download_depot 359550 359551 809542866761090243
 
-## Y6S3 晶坚守卫行动 (西部对决活动) 此版本使用 UPCR1 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR1
+## Y6S3 晶坚守卫行动 (异种危机) 此版本使用 UPCR1 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR1
 - download_depot 359550 377237 4859695099882698284
 - download_depot 359550 359551 6526531850721822265
 
-## Y6S4 精兵锐器行动 (体育场+打雪仗活动) 此版本使用 UPCR2_NEW 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR2_NEW
+## Y6S4 精兵锐器行动 (体育场+雪地大乱斗) 此版本使用 UPCR2_NEW 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR2_NEW
 - download_depot 359550 377237 2637055726475611418
 - download_depot 359550 359551 8627214406801860013
 
-## Y7S1 未完待续
+## Y7S1 鬼面行动 (炼狱) 此版本使用 UPCR2_NEW 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR2_NEW
+- download_depot 359550 377237 8323869632165751287
+- download_depot 359550 359551 2178080523228113690
+
+## Y7S2 矢量光影行动 (M.U.T.E 协议升级版) 此版本使用 UPCR2_NEW 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR2_NEW
+- download_depot 359550 377237 1363132201391540345
+- download_depot 359550 359551 133280937611742404
+
+## Y7S3 残蜂汹涌行动 (Doctors Sniper) 此版本使用 UPCR2_NEW 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR2_NEW
+- download_depot 359550 377237 6425223567680952075
+- download_depot 359550 359551 5906302942203575464
+
+## Y7S4 烈日突袭行动 (雪地大乱斗) 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
+- download_depot 359550 377237 4466027729495813039
+- download_depot 359550 359551 1819898955518120444
+
+## Y8S1 头号指令行动 (泰迪攻防战 + 炼狱) 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
+- download_depot 359550 377237 3050554908913191669
+- download_depot 359550 359551 1575870740329742681
+
+## 完结撒花 =_= !
