@@ -60,32 +60,52 @@
 - download_depot 359550 377237 6502258854032233436
 - download_depot 359550 359551 7659555540733025386
 
-## Y4S1 Burnt Horizon 4.1.0.2 (彩虹魔法愚人节活动) 燃烧地平线 | 59.7 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y4S1 Burnt Horizon 4.1.0.2 (彩虹魔法活动) 燃烧地平线 | 59.7 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 8356277316976403078
 - download_depot 359550 359551 5935578581006804383
 
-## Y4S2 Phantom Sight 4.2.0 (Showdown) 幻镜行动 | 67.1 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y4S2 Phantom Sight 4.2.0 (西部对决) 幻镜行动 | 67.1 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 693082837425613508
 - download_depot 359550 359551 5408324128694463720
 
-## Y4S3 Ember Rise 4.3.3.1 (Doktor's Curse/Money Heist) 余烬重燃行动 | 69.6 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y4S3 Ember Rise 4.3.3.1 (怪医诅咒/纸房子) 余烬重燃行动 | 69.6 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 3546781236735558235
 - download_depot 359550 359551 7869081741739849703
 
-## Y4S4 Shifting Tides 4.4.0 (Stadium) 幻变潮汐行动 | 75.2 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y4S4 Shifting Tides 4.4.0 (体育场) 幻变潮汐行动 | 75.2 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 299124516841461614
 - download_depot 359550 359551 1842268638395240106
 
-## Y5S1 Void Edge 5.1.2 (The Grand Larceny/Golden Gun) 虚空边境行动 | 74.3 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y5S1 Void Edge 5.1.2 (激战风云/黄金枪) 虚空边境行动 | 74.3 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 4736360397583523381
 - download_depot 359550 359551 6296533808765702678
 
-## Y5S2 Steel Wave 5.2.3 (M.U.T.E. Protocol) 钢流行动 | 81.3 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y5S2 Steel Wave 5.2.3 (M.U.T.E. 协议) 钢流行动 | 81.3 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 4367817844736324940
 - download_depot 359550 359551 893971391196952070
 
-## Y5S3 Shadow Legacy (Sugar Fright) 暗影传承行动 此版本使用 Lumaplay！确保您启动的是 Lumaplay.exe，而不是普通的 RainbowSix.exe！此版本使用更新后的机枪! -- 补丁目录：Plazas\LumaPlay
+## Y5S3 Shadow Legacy (糖果恐惧) 暗影传承行动 此版本使用 Lumaplay 补丁！确保您启动的是 Lumaplay.exe，而不是RainbowSix.exe！此版本有更新后的机枪! -- 补丁目录：Plazas\LumaPlay
 - download_depot 359550 377237 85893637567200342
 - download_depot 359550 359551 3089981610366186823
 
-## 未完待续...
+## Y5S4 Neon Dawn (国际邀请赛之路 2021) 霓虹黎明 此版本使用 CPlay 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！此版本有更新后的索菲亚! -- 补丁目录：Plazas\CPlay
+- download_depot 359550 377237 4713320084981112320
+- download_depot 359550 359551 3711873929777458413
+
+## Y6S1 深红劫案行动 (天启 容器罐活动) 此版本使用 CPlay 补丁！确保您启动的是RainbowSix.bat! -- 补丁目录：Plazas\CPlay
+- download_depot 359550 377237 7890853311380514304
+- download_depot 359550 359551 7485515457663576274
+
+## Y6S2 北极星行动 (破坏窝点活动) 此版本使用 CPlay 补丁！确保您启动的是RainbowSix.bat! 此版本有更新后的机枪哥! -- 补丁目录：Plazas\CPlay
+- download_depot 359550 377237 8733653062998518164
+- download_depot 359550 359551 809542866761090243
+
+## Y6S3 晶坚守卫行动 (西部对决活动) 此版本使用 UPCR1 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR1
+- download_depot 359550 377237 4859695099882698284
+- download_depot 359550 359551 6526531850721822265
+
+## Y6S4 精兵锐器行动 (体育场+打雪仗活动) 此版本使用 UPCR2_NEW 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\UPCR2_NEW
+- download_depot 359550 377237 2637055726475611418
+- download_depot 359550 359551 8627214406801860013
+
+## Y7S1 未完待续
