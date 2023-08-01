@@ -7,6 +7,7 @@
 
 ## 在补丁文件CODEX.ini中UserName = 和 GameName = 后面可修改用户名游戏名
 ## 存档保存位置%SystemDrive%\Users\Public\Documents\uPlay\CODEX\Saves
+## 联机可以使用openvpn，简单方便无病毒，这里提供一台服务器供测试游玩。
 
 ## Y1S0 Vanilla 1.0 初代 | 14.2 GB -- 补丁目录：Plazas\PLAZA_BO
 - download_depot 359550 377237 8358812283631269928
