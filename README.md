@@ -7,7 +7,7 @@
 
 ## 在补丁文件CODEX.ini中UserName = 和 GameName = 后面可修改用户名游戏名
 ## 存档保存位置%SystemDrive%\Users\Public\Documents\uPlay\CODEX\Saves
-## 联机可以使用openvpn，简单稳定不报毒，QQ群439523286里提供一台服务器供测试游玩。或者radmin_vpn、EasyN2N等虚拟局域网软件，开房后搜不到可以尝试打开https://github.com/dechamps/WinIPBroadcast
+## 联机可以使用openvpn，简单稳定不报毒，QQ群439523286里提供一台服务器供测试游玩。或者radmin_vpn、EasyN2N等虚拟局域网软件，开房后搜不到可以尝试清理多余的网卡，保持网卡尽可能只有上网的和联机的TAP...V9两个在工作，然后别用无线网！
 
 ## Y1S0 Vanilla 1.0 初代 | 14.2 GB -- 补丁目录：Plazas\PLAZA_BO
 - download_depot 359550 377237 8358812283631269928
