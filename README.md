@@ -121,7 +121,9 @@
 - download_depot 359550 377237 6425223567680952075
 - download_depot 359550 359551 5906302942203575464
 
-## Y7S4 烈日突袭行动 (雪地大乱斗) ？最后几个赛季未测试，不缺定是否准确，请配合更新日期和https://steamdb.info/depot/359551/manifests/确认
+## Y7S4 烈日突袭行动 (雪地大乱斗) ？最后几个赛季未测试，不缺定是否准确，请配合更新日期和SteamDB确认
+- https://steamdb.info/depot/377237/manifests/
+- https://steamdb.info/depot/359551/manifests/
 
 ## Y8S1 头号指令行动 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
 - download_depot 359550 377237 4466027729495813039
