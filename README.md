@@ -61,7 +61,7 @@
 - download_depot 359550 377237 6502258854032233436
 - download_depot 359550 359551 7659555540733025386
 
-## Y4S1 Burnt Horizon 4.1.0.2 (彩虹魔法活动) 燃烧地平线 | 59.7 GB -- 补丁目录：Plazas\PLAZA_NEW
+## Y4S1 Burnt Horizon 4.1.0.2 (彩虹就是魔法) 燃烧地平线 | 59.7 GB -- 补丁目录：Plazas\PLAZA_NEW
 - download_depot 359550 377237 8356277316976403078
 - download_depot 359550 359551 5935578581006804383
 
@@ -121,13 +121,15 @@
 - download_depot 359550 377237 6425223567680952075
 - download_depot 359550 359551 5906302942203575464
 
-## Y7S4 烈日突袭行动 (雪地大乱斗) ？最后几个赛季未测试，不缺定是否准确，请配合更新日期和SteamDB确认
-- https://steamdb.info/depot/377237/manifests/
-- https://steamdb.info/depot/359551/manifests/
-
-## Y8S1 头号指令行动 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
+## Y7S4 烈日突袭行动 (雪地大乱斗) 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
 - download_depot 359550 377237 4466027729495813039
 - download_depot 359550 359551 1819898955518120444
+
+## Y8S1 头号指令行动 此赛季未测试补丁，不缺定是否能用，请配合更新日期3月7号和SteamDB确认。此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
+- download_depot 359550 377237 9170399840050601760
+- download_depot 359550 359551 2374032323426576007
+- https://steamdb.info/depot/377237/manifests/
+- https://steamdb.info/depot/359551/manifests/
 
 ## Y8S2.1 恐惧因素行动 (炼狱) 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
 - download_depot 359550 377237 3050554908913191669
