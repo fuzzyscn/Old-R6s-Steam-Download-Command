@@ -125,14 +125,18 @@
 - download_depot 359550 377237 4466027729495813039
 - download_depot 359550 359551 1819898955518120444
 
-## Y8S1 头号指令行动 此赛季未测试补丁，不缺定是否能用，请配合更新日期3月7号和SteamDB确认。此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
-- download_depot 359550 377237 9170399840050601760
-- download_depot 359550 359551 2374032323426576007
-- https://steamdb.info/depot/377237/manifests/
-- https://steamdb.info/depot/359551/manifests/
+## Y8S1 头号指令行动 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
+- download_depot 359550 377237 3275824905781062648
+- download_depot 359550 359551 5863062164463920572
 
-## Y8S2.1 恐惧因素行动 (炼狱) 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
-- download_depot 359550 377237 3050554908913191669
+## Y8S2 恐惧因素行动 (炼狱) 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
+- download_depot 359550 377237 3558972082517836520
 - download_depot 359550 359551 1575870740329742681
 
-## 完结撒花 =_= !
+## Y8S3 Heavy Mettle 此版本使用 Y8SX 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！-- 补丁目录：Plazas\Y8SX
+- download_depot 359550 377237 7845616952346988253
+- download_depot 359550 359551 7492642056657673136
+
+## 完结撒花 =_= 参考网站:https://github.com/AKrisz2/R6Downloader
+- https://steamdb.info/depot/377237/manifests/
+- https://steamdb.info/depot/359551/manifests/
