@@ -86,9 +86,9 @@ Y5S3 Shadow Legacy (慌糖惊魂夜) 暗影传承行动 此版本使用 Lumaplay
 download_depot 359550 377237 85893637567200342
 download_depot 359550 359551 3089981610366186823
 
-Y5S4 Neon Dawn (国际邀请赛之路 2021) 霓虹黎明 此版本使用 CPlay 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！此版本有更新后的索菲亚! -- 补丁目录：Plazas\CPlay
-download_depot 359550 377237 4713320084981112320
-download_depot 359550 359551 3711873929777458413
+Y5S4.2 Neon Dawn (国际邀请赛之路 2021 支持联机房主用的Y5专用修改器) 霓虹黎明 此版本使用 CPlay 补丁！确保您启动的是RainbowSix.bat，而不是RainbowSix.exe！此版本有更新后的索菲亚! -- 补丁目录：Plazas\CPlay
+download_depot 359550 377237 3390446325154338855
+download_depot 359550 359551 6947060999143280245
 
 Y6S1 深红劫案行动 (天启 容器罐活动) 此版本使用 CPlay 补丁！确保您启动的是RainbowSix.bat! -- 补丁目录：Plazas\CPlay
 download_depot 359550 377237 7890853311380514304
