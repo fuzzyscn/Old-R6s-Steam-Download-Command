@@ -1,5 +1,5 @@
 # Old-R6s-Steam-Download-Command
-所有旧版彩虹六号steam下载命令
+所有旧版彩虹六号steam下载器（新方法）：https://www.123pan.com/s/v3YyVv-ncDSv.html
 - Win+R 运行框输入冒号后命令启动steam控制台：steam://open/console
 - 控制台运行download_depot开头的命令即可下载以下旧版本彩虹六号，速度非常快！
 - 下载前需确认空间足够，下载文件的位置在Steam安装目录下\steamapps\content\app_359550\377237和359551里面，
