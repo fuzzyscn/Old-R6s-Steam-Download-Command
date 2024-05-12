@@ -1,0 +1,28 @@
+CPlay [UPC_R1] (Crack) for Y6S3 and UP
+1. Download the Game (Y6S3 or UP)
+2. Start Steam and make sure you are invisible!
+(Not needed but i think you not want to your friends can see you play cracked version)
+3. Once you have grab this folder "CPlay" and copy it's contents to your game folder.
+4. Start only RainbowSix.bat!
+5. Have fun your "Neon Dawn" game!
+
+Note:
+- Working on Y6S3!
+- When it asks to overwrite a few files click yes. 
+- If your anti-virus blocks these files then make sure to allow them. 
+- CODEX.ini for SAVE
+- CPlay.ini for Uplay things, like name,etc
+- CPlay.ini SavePath is not work , just leave what it said
+- cream_api.ini is Steam emu
+- uplay_r1_o.dll / uplay_r164_o.dll is CODEX original files :) //THX FOR CODEX,PLAZA <3
+
+Multiplayer:
+- YES!
+- Use Radmin VPN or Hamachi!
+- Custom game work, Terrorst Hunt work
+- Dont forget to enable siege through firewall
+
+Thanks for:
+acidicoala for LinkerExports to get original plaza works with save
+Rat431 for "ColdPlay_Uplay" emulator work
+And CODEX,Plaza to can use their Save mechanic and dont need to reverse-engineer more uplay emulator stuff
