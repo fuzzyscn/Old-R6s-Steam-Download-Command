@@ -85,6 +85,12 @@ def DownloadConfirm(_path, _version, _gamePath, txt):
         else:
             input("\n回车开始下载彩虹六号 "+_version+" "+manifestList[_version][4]+" 启动文件为：" + manifestList[_version][8])
 
+def RunGame(path):
+    try:
+        subprocess.run(['start', path], shell=True)
+    except Exception as e:
+        print(e)
+        
 def DownloadPatch(_version, _gamePath):
     name = input("\n下载验证完毕，为避免存档冲突及联机使用，请设置你的英文游戏昵称：")
     name += '-'+_version
@@ -119,20 +125,30 @@ def DownloadPatch(_version, _gamePath):
     elif patchFileCount > 0:
         print("\n破解补丁已安装成功！补丁文件数量："+str(patchFileCount)+" 文件夹数量："+str(patchFolderCount))
         
-    startGame = input("\n是否启动游戏？(y/n)：")
-    if startGame == "y":
-        startGamePath = os.path.join(_gamePath, manifestList[_version][8])
-        if manifestList[_version][8] == "RainbowSix.exe":
-            if os.path.exists(startGamePath):
-                subprocess.run(['start', startGamePath], shell=True)
-                #os.system(startGamePath)
-            else:
-                newGameNamePath = os.path.join(_gamePath, "RainbowsixGame.exe")
-                subprocess.run(['start', newGameNamePath], shell=True)
-                #os.system(newGameNamePath)
+    startGamePath = os.path.join(_gamePath, manifestList[_version][8])
+    if manifestList[_version][8] == "RainbowSix.exe":
+        if os.path.exists(startGamePath):
+            print("\n游戏启动路径为: "+startGamePath)
+            startGame = input("\n启动游戏的 exe 文件已准备好，是否启动游戏？(y/n)：")
+            if startGame == "y":
+                RunGame(startGamePath)
         else:
-            subprocess.run(['start', startGamePath], shell=True)
-            #os.system(startGamePath)
+            startGamePath = os.path.join(_gamePath, "RainbowsixGame.exe")
+            if os.path.exists(startGamePath):
+                print("\n游戏启动路径为: "+startGamePath)
+                startGame = input("\n启动游戏的 exe 文件已准备好，是否启动游戏？(y/n)：")
+                if startGame == "y":
+                    RunGame(startGamePath)
+            else:
+                print("\n没有启动游戏的 exe 文件！请重新下载以验证游戏完整性！")
+    else:
+        if os.path.exists(startGamePath):
+            print("\n游戏启动路径为: "+startGamePath)
+            startGame = input("\n启动游戏的 bat 文件已准备好，是否启动游戏？(y/n)：")
+            if startGame == "y":
+                RunGame(startGamePath)
+        else:
+            print("\n没有启动游戏的 bat 文件！请重新下载以验证游戏完整性！")
 
 def Main():
     gongNeng = input("\n请输入功能编号：")
