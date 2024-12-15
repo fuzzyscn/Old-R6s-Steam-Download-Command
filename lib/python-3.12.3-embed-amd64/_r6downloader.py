@@ -44,14 +44,15 @@ manifestList = {
 def Help():
     print(
                 '''
-                ----功能 1《彩虹六号-围攻》国内下载器     (从国内 Steam 服务器中下载，速度较快，需输入Steam账号密码)
-                ----功能 2《彩虹六号-围攻》海外下载器     (从海外 Steam 服务器中下载，速度一般，免登录Steam)
+                ----功能 1《彩虹六号-围攻》国内下载器     (需登录购买了彩六游戏的Steam账号，多次下载可验证完整性)
+                ----功能 2《彩虹六号-围攻》国内下载器Pro  (免登录Steam，使用前需开启Steam加速器，无法验证完整性)
                 ----功能 3 打开地图模式皮肤修改器         (全皮肤最高支持到Y4S4)
                 ----功能 4 安装联机工具 OpenVPN           (搜房记录查询 https://skin.ppkok.com/r6/ )
                 ----功能 5 代理转发房主IP                 (搜不到房间时使用)
                 ----功能 6 显示当前网卡路由表             (搜不到房间时查看网卡优先级排错，看不懂请截图发群里)
                 
                 ----Made By Fuzzys QQ群：439523286
+                ----下载器当前版本: v 1.6
                 '''
     )
 
@@ -60,13 +61,12 @@ def DownloadPre():
     num = 0
     for ys in manifestList:
         num += 1
-        print("下载验证 "+ys+" 请输入序号 "+str(num))
+        print("下载 "+ys+" 请输入序号 "+str(num))
         versionList.append(ys)
-    id = input("\n请输入要下载或验证的《彩虹六号-围攻》赛季序号（不输默认为Y3S1）：") or 10
+    id = input("\n请输入要下载的《彩虹六号-围攻》赛季序号（不输默认为Y3S1）：") or 10
     return versionList[int(id)-1]
 
 def ChoosePath(_version):
-    print("\n提示：如需验证完整性请选择 "+_version+" 所在的文件夹上一层，即可验证补全 "+_version+"赛季 缺失的文件！")
     print("重要提示：必须选择英文路径文件夹来保存游戏！")
     time.sleep(2)
     root = tk.Tk()
@@ -99,7 +99,7 @@ def RunGame(filePath, cwdPath):
         
 def DownloadPatch(_version, _gamePath):
     try:
-        print("如上述出现 Connection to Steam Failed. Trying again 和 Error 字样请开启Steam社区加速器重试！")
+        print("如上述出现 Failed Trying again 和 Error 字样请开启Steam社区加速器重试！")
         name = input("\n下载验证完毕，为避免存档冲突及联机使用，请输入你的英文游戏昵称（不要直接回车！）：")
         name += '-'+_version
         patchFileCount = 0
@@ -152,7 +152,7 @@ def DownloadPatch(_version, _gamePath):
                     print("\n即将返回主菜单！如自动启动卡BettleEye安装，请尝试手动启动游戏。")
                     print("游戏启动路径为: "+startGamePath)
                 else:
-                    print("\n没有找到启动游戏的 RainbowSix.exe 文件！请重新下载以验证游戏完整性！")
+                    print("\n没有找到启动游戏的 RainbowSix.exe 文件！请验证游戏文件完整性！")
         else:
             if os.path.exists(startGamePath):
                 startGame = input("\n启动游戏的 bat 文件已准备好，是否启动游戏？(y/n)：")
@@ -171,6 +171,7 @@ def Main():
     gongNeng = input("\n请输入功能编号：")
     if gongNeng == "1":
         _version = DownloadPre()
+        print("\n提示：如需验证完整性请选择 "+_version+" 所在的文件夹上一层，即可验证补全 "+_version+"赛季 缺失的文件！")
         _path = ChoosePath(_version)
         _gamePath = os.path.join(_path, _version)
         if _gamePath.count(_version) > 1:
@@ -182,7 +183,7 @@ def Main():
             # if not os.path.exists("apps.txt"):#判断是否第一次运行
                 # os.system("lib\\dotnet-runtime-6.0.26-win-x64.exe -q")
             if manifestList[_version][3]:
-                print("\n该版本需登录购买了《彩虹六号-围攻》的Steam账号才能下载！")
+                print("\n该版本需登录购买了《彩虹六号-围攻》的Steam账号才能下载或验证！")
                 steamUser = input("\n请输入你的Steam账号：")
                 print("\n 如第一次使用请在下面输入你的Steam密码：")
                 if _first:
@@ -199,29 +200,29 @@ def Main():
             
             DownloadPatch(_version, _gamePath)
     elif gongNeng == "2":
+        #print("\n此模式仅支持中国大陆以外地区用户使用！\n国内想用请挂全局梯子！\n下载会消耗梯子流量！")
         _version = DownloadPre()
-        print("\n此模式仅支持中国大陆以外地区用户使用！\n国内想用请挂全局梯子！\n下载会消耗梯子流量！")
         _path = ChoosePath(_version)
         _gamePath = os.path.join(_path, _version)
         #_txt = "\n下载前请用UU加速Steam商店，节点选路由模式！"
         if _gamePath.count(_version) > 1:
             print("\n你选择的文件夹为："+_gamePath)
-            print("此路径下已有 "+str(_gamePath.count(_version)-1)+" 个 "+_version+" 文件夹，请重新选择首个 "+_version+" 文件夹的上一层来验证完整性！")
+            print("此路径下已有 "+str(_gamePath.count(_version)-1)+" 个 "+_version+" 文件夹，请重新选择首个 "+_version+" 文件夹的上一层！")
         else:
-            _first = IsFirstDownload(_path, _version, _gamePath)
+            # _first = IsFirstDownload(_path, _version, _gamePath)
             
-            keyFile = "depot_keys.json"#复制key到LOCAL APPDATA
-            path_ProgrmData = os.getenv("LOCALAPPDATA")
-            steamctlPath = path_ProgrmData+"\\steamctl\\steamctl\\"
-            if not os.path.exists(steamctlPath):
-                os.makedirs(steamctlPath)
-            shutil.copy(os.path.join("lib\\manifestFiles\\", keyFile), os.path.join(steamctlPath, keyFile))
-            time.sleep(1)
+            # keyFile = "depot_keys.json"#复制key到LOCAL APPDATA
+            # path_ProgrmData = os.getenv("LOCALAPPDATA")
+            # steamctlPath = path_ProgrmData+"\\steamctl\\steamctl\\"
+            # if not os.path.exists(steamctlPath):
+                # os.makedirs(steamctlPath)
+            # shutil.copy(os.path.join("lib\\manifestFiles\\", keyFile), os.path.join(steamctlPath, keyFile))
+            # time.sleep(1)
             
             pythonPath = "lib\\python-3.12.3-embed-amd64\\python.exe"
-            os.system(pythonPath+" -m steamctl depot download -f lib\\manifestFiles\\"+manifestList[_version][0]+" -o "+_gamePath+" --skip-licenses --skip-login --cell_id 4")
+            os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][0]+" -k 55e7ea1db9a23f549c35553adb88ac3f97c1fc5f649df1515f5fa1dde7f501a6")
             time.sleep(1)
-            os.system(pythonPath+" -m steamctl depot download -f lib\\manifestFiles\\"+manifestList[_version][1]+" -o "+_gamePath+" --skip-licenses --skip-login --cell_id 4")#1 2 5
+            os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][1]+" -k b13d0908374e12054e73230c57da5d674dfe45cffe6ba7e11b3f1a8b155938d0")
             
             DownloadPatch(_version, _gamePath)
     elif gongNeng == "3":
