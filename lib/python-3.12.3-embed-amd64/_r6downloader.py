@@ -7,38 +7,38 @@ import tkinter as tk
 from tkinter import filedialog
 
 manifestList = {
-    "Y1S0" : ["r6_y1s0_377237", "r6_y1s0_359551", "8358812283631269928 3893422760579204530",1, "初代 | 14.2 GB ", "Plazas\\PLAZA_BO", 7, 0, "RainbowSixGame.exe"],
-    "Y1S1" : ["r6_y1s1_377237", "r6_y1s1_359551", "5188997148801516344 7932785808040895147",1, "墨冰行动 | 16.7 GB ", "Plazas\\PLAZA_BO", 7, 0, "RainbowSixGame.exe"],
-    "Y1S2" : ["r6_y1s2_377237", "r6_y1s2_359551", "2303064029242396590 2206497318678061176",1, "尘土战线 | 20.9 GB ", "Plazas\\PLAZA_BO", 7, 0, "RainbowSixGame.exe"],
-    "Y1S3" : ["r6_y1s3_377237", "r6_y1s3_359551", "5819137024728546741 5851804596427790505",1, "骷髅雨 | 25.1 GB ", "Plazas\\PLAZA_BO", 7, 0, "RainbowSixGame.exe"],
-    "Y1S4" : ["r6_y1s4_377237", "r6_y1s4_359551", "3576607363557872807 8569920171217002292",1, "赤鸦行动 | 28.5 GB ", "Plazas\\PLAZA_BO", 7, 0, "RainbowSixGame.exe"],
-    "Y2S1" : ["r6_y2s1_377237", "r6_y2s1_359551", "2248734317261478192 8006071763917433748",1, "丝绒壳行动 | 33.2 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y2S2" : ["r6_y2s2_377237", "r6_y2s2_359551", "5875987479498297665 708773000306432190",1, "健康行动 | 34 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y2S3" : ["r6_y2s3_377237", "r6_y2s3_359551", "6708129824495912434 1613631671988840841",1, "血兰花行动 | 34.3 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y2S4" : ["r6_y2s4_377237", "r6_y2s4_359551", "8748734086032257441 4221297486420648079",1, "白噪声行动 | 48.7 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y3S1" : ["r6_y3s1_377237", "r6_y3s1_359551", "5071357104726974256 4701787239566783972",1, "奇美拉行动 | 58.8 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y3S2" : ["r6_y3s2_377237", "r6_y3s2_359551", "6507886921175556869 8765715607275074515",1, "备战行动 | 63.3 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y3S3" : ["r6_y3s3_377237", "r6_y3s3_359551", "5562094852451837435 7781202564071310413",1, "暗空行动 | 72.6 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y3S4" : ["r6_y3s4_377237", "r6_y3s4_359551", "6502258854032233436 7659555540733025386",1, "风城行动 | 76.9 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y4S1" : ["r6_y4s1_377237", "r6_y4s1_359551", "8356277316976403078 5935578581006804383",1, "燃烧地平线 | 59.7 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y4S2" : ["r6_y4s2_377237", "r6_y4s2_359551", "693082837425613508 5408324128694463720",1, "幻镜行动 | 67.1 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y4S3" : ["r6_y4s3_377237", "r6_y4s3_359551", "3546781236735558235 7869081741739849703",1, "余烬重燃行动 | 69.6 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y4S4" : ["r6_y4s4_377237", "r6_y4s4_359551", "299124516841461614 1842268638395240106",1, "幻变潮汐行动 | 75.2 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y5S1" : ["r6_y5s1_377237", "r6_y5s1_359551", "4736360397583523381 6296533808765702678",1, "虚空边境行动 | 74.3 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y5S2" : ["r6_y5s2_377237", "r6_y5s2_359551", "4367817844736324940 893971391196952070",1, "钢流行动 | 81.3 GB ", "Plazas\\PLAZA_NEW", 7, 0, "RainbowSixGame.exe"],
-    "Y5S3" : ["r6_y5s3_377237", "r6_y5s3_359551", "85893637567200342 3089981610366186823",1, "暗影传承行动 ", "Plazas\\CPlay", 12, 0, "RainbowSix.bat"],
-    "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", "3390446325154338855 6947060999143280245",1, "霓虹黎明行动（联机猎恐）", "Plazas\\CPlay", 12, 0, "RainbowSix.bat"],
-    "Y6S1" : ["r6_y6s1_377237", "r6_y6s1_359551", "7890853311380514304 7485515457663576274",1, "深红劫案行动 ", "Plazas\\CPlay", 12, 0, "RainbowSix.bat"],
-    "Y6S2" : ["r6_y6s2_377237", "r6_y6s2_359551", "8733653062998518164 809542866761090243",1, "北极星行动 ", "Plazas\\CPlay", 12, 0, "RainbowSix.bat"],
-    "Y6S3" : ["r6_y6s3_377237", "r6_y6s3_359551", "4859695099882698284 6526531850721822265",1, "晶坚守卫行动 ", "Plazas\\UPCR1", 11, 0, "RainbowSix.bat"],
-    "Y6S4" : ["r6_y6s4_377237", "r6_y6s4_359551", "2637055726475611418 8627214406801860013",1, "精兵锐器行动 ", "Plazas\\UPCR2_NEW", 8, 0, "RainbowSix.bat"],
-    "Y7S1" : ["r6_y7s1_377237", "r6_y7s1_359551", "8323869632165751287 2178080523228113690",1, "鬼面行动行动 ", "Plazas\\UPCR2_NEW", 8, 0, "RainbowSix.bat"],
-    "Y7S2" : ["r6_y7s2_377237", "r6_y7s2_359551", "1363132201391540345 133280937611742404",1, "矢量光影行动 ", "Plazas\\UPCR2_NEW", 8, 0, "RainbowSix.bat"],
-    "Y7S3" : ["r6_y7s3_377237", "r6_y7s3_359551", "6425223567680952075 5906302942203575464",1, "残蜂汹涌行动 ", "Plazas\\UPCR2_NEW", 8, 0, "RainbowSix.bat"],
-    "Y7S4" : ["r6_y7s4_377237", "r6_y7s4_359551", "4466027729495813039 1819898955518120444",1, "烈日突袭行动 ", "Plazas\\Y8SX", 9, 1, "RainbowSix.bat"],
-    "Y8S1" : ["r6_y8s1_377237", "r6_y8s1_359551", "3275824905781062648 5863062164463920572",1, "头号指令行动 ", "Plazas\\Y8SX", 9, 1, "RainbowSix.bat"],
-    "Y8S2" : ["r6_y8s2_377237", "r6_y8s2_359551", "3050554908913191669 1575870740329742681",1, "恐惧因素行动（全干员孤狼猎恐）", "Plazas\\Y8SX", 9, 1, "RainbowSix.bat"],
-    "Y8S3" : ["r6_y8s3_377237", "r6_y8s3_359551", "7845616952346988253 7492642056657673136",1, "开路先锋行动（没有解锁全干员）", "Plazas\\Y8SX", 9, 1, "RainbowSix.bat"],
+    "Y1S0" : ["r6_y1s0_377237", "r6_y1s0_359551", 7, 0, "初代 | 14.2 GB ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "8358812283631269928", "3893422760579204530"],
+    "Y1S1" : ["r6_y1s1_377237", "r6_y1s1_359551", 7, 0, "墨冰行动 | 16.7 GB ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5188997148801516344", "7932785808040895147"],
+    "Y1S2" : ["r6_y1s2_377237", "r6_y1s2_359551", 7, 0, "尘土战线 | 20.9 GB ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "2303064029242396590", "2206497318678061176"],
+    "Y1S3" : ["r6_y1s3_377237", "r6_y1s3_359551", 7, 0, "骷髅雨 | 25.1 GB ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5819137024728546741", "5851804596427790505"],
+    "Y1S4" : ["r6_y1s4_377237", "r6_y1s4_359551", 7, 0, "赤鸦行动 | 28.5 GB ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "3576607363557872807", "8569920171217002292"],
+    "Y2S1" : ["r6_y2s1_377237", "r6_y2s1_359551", 7, 0, "丝绒壳行动 | 33.2 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "2248734317261478192", "8006071763917433748"],
+    "Y2S2" : ["r6_y2s2_377237", "r6_y2s2_359551", 7, 0, "健康行动 | 34 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5875987479498297665", "708773000306432190"],
+    "Y2S3" : ["r6_y2s3_377237", "r6_y2s3_359551", 7, 0, "血兰花行动 | 34.3 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6708129824495912434", "1613631671988840841"],
+    "Y2S4" : ["r6_y2s4_377237", "r6_y2s4_359551", 7, 0, "白噪声行动 | 48.7 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8748734086032257441", "4221297486420648079"],
+    "Y3S1" : ["r6_y3s1_377237", "r6_y3s1_359551", 7, 0, "奇美拉行动 | 58.8 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5071357104726974256", "4701787239566783972"],
+    "Y3S2" : ["r6_y3s2_377237", "r6_y3s2_359551", 7, 0, "备战行动 | 63.3 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6507886921175556869", "8765715607275074515"],
+    "Y3S3" : ["r6_y3s3_377237", "r6_y3s3_359551", 7, 0, "暗空行动 | 72.6 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5562094852451837435", "7781202564071310413"],
+    "Y3S4" : ["r6_y3s4_377237", "r6_y3s4_359551", 7, 0, "风城行动 | 76.9 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6502258854032233436", "7659555540733025386"],
+    "Y4S1" : ["r6_y4s1_377237", "r6_y4s1_359551", 7, 0, "燃烧地平线 | 59.7 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8356277316976403078", "5935578581006804383"],
+    "Y4S2" : ["r6_y4s2_377237", "r6_y4s2_359551", 7, 0, "幻镜行动 | 67.1 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "693082837425613508", "5408324128694463720"],
+    "Y4S3" : ["r6_y4s3_377237", "r6_y4s3_359551", 7, 0, "余烬重燃行动 | 69.6 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "3546781236735558235", "7869081741739849703"],
+    "Y4S4" : ["r6_y4s4_377237", "r6_y4s4_359551", 7, 0, "幻变潮汐行动 | 75.2 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "299124516841461614", "1842268638395240106"],
+    "Y5S1" : ["r6_y5s1_377237", "r6_y5s1_359551", 7, 0, "虚空边境行动 | 74.3 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4736360397583523381", "6296533808765702678"],
+    "Y5S2" : ["r6_y5s2_377237", "r6_y5s2_359551", 7, 0, "钢流行动 | 81.3 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4367817844736324940", "893971391196952070"],
+    "Y5S3" : ["r6_y5s3_377237", "r6_y5s3_359551", 12, 0, "暗影传承行动 ", "Plazas\\CPlay", "RainbowSix.bat", "85893637567200342", "3089981610366186823"],
+    "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", 12, 0, "霓虹黎明行动（联机猎恐）", "Plazas\\CPlay", "RainbowSix.bat", "3390446325154338855", "6947060999143280245"],
+    "Y6S1" : ["r6_y6s1_377237", "r6_y6s1_359551", 12, 0, "深红劫案行动 ", "Plazas\\CPlay", "RainbowSix.bat", "7890853311380514304", "7485515457663576274"],
+    "Y6S2" : ["r6_y6s2_377237", "r6_y6s2_359551", 12, 0, "北极星行动 ", "Plazas\\CPlay", "RainbowSix.bat", "8733653062998518164", "809542866761090243"],
+    "Y6S3" : ["r6_y6s3_377237", "r6_y6s3_359551", 11, 0, "晶坚守卫行动 ", "Plazas\\UPCR1", "RainbowSix.bat", "4859695099882698284", "6526531850721822265"],
+    "Y6S4" : ["r6_y6s4_377237", "r6_y6s4_359551", 8, 0, "精兵锐器行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "2637055726475611418", "8627214406801860013"],
+    "Y7S1" : ["r6_y7s1_377237", "r6_y7s1_359551", 8, 0, "鬼面行动行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "8323869632165751287", "2178080523228113690"],
+    "Y7S2" : ["r6_y7s2_377237", "r6_y7s2_359551", 8, 0, "矢量光影行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "1363132201391540345", "133280937611742404"],
+    "Y7S3" : ["r6_y7s3_377237", "r6_y7s3_359551", 8, 0, "残蜂汹涌行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "6425223567680952075", "5906302942203575464"],
+    "Y7S4" : ["r6_y7s4_377237", "r6_y7s4_359551", 9, 1, "烈日突袭行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "4466027729495813039", "1819898955518120444"],
+    "Y8S1" : ["r6_y8s1_377237", "r6_y8s1_359551", 9, 1, "头号指令行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "3275824905781062648", "5863062164463920572"],
+    "Y8S2" : ["r6_y8s2_377237", "r6_y8s2_359551", 9, 1, "恐惧因素行动（全干员孤狼猎恐）", "Plazas\\Y8SX", "RainbowSix.bat", "3050554908913191669", "1575870740329742681"],
+    "Y8S3" : ["r6_y8s3_377237", "r6_y8s3_359551", 9, 1, "开路先锋行动（没有解锁全干员）", "Plazas\\Y8SX", "RainbowSix.bat", "7845616952346988253", "7492642056657673136"],
 }
 
 def Help():
@@ -80,7 +80,7 @@ def IsFirstDownload(_path, _version, _gamePath):
             print("\n你选择的文件夹已安装赛季 "+_version+" "+manifestList[_version][4]+" 开始验证游戏完整性！")
             return False
         else:
-            print("\n开始下载彩虹六号 "+_version+" "+manifestList[_version][4]) #+" 启动文件为：" + manifestList[_version][8])
+            print("\n开始下载彩虹六号 "+_version+" "+manifestList[_version][4]) #+" 启动文件为：" + manifestList[_version][6])
             return True
     else:
         print("\n游戏文件将下载到当前文件夹！"+_gamePath)
@@ -88,7 +88,7 @@ def IsFirstDownload(_path, _version, _gamePath):
             print("\n当前文件夹已安装赛季 "+_version+" "+manifestList[_version][4]+" 开始验证游戏完整性！")
             return False
         else:
-            print("\n开始下载彩虹六号 "+_version+" "+manifestList[_version][4]) #+" 启动文件为：" + manifestList[_version][8])
+            print("\n开始下载彩虹六号 "+_version+" "+manifestList[_version][4]) #+" 启动文件为：" + manifestList[_version][6])
             return True
 
 def RunGame(filePath, cwdPath):
@@ -99,7 +99,7 @@ def RunGame(filePath, cwdPath):
         
 def DownloadPatch(_version, _gamePath):
     try:
-        print("如上述出现 Failed Trying again 和 Error 字样请开启Steam社区加速器重试！")
+        print("如上述出现 Failed Timeout 和 Error 字样请开启Steam社区加速器重试！")
         name = input("\n下载验证完毕，为避免存档冲突及联机使用，请输入你的英文游戏昵称（不要直接回车！）：")
         name += '-'+_version
         patchFileCount = 0
@@ -126,15 +126,15 @@ def DownloadPatch(_version, _gamePath):
                             f.write(modified_content)
                             f.close()
                             
-        if patchFolderCount != manifestList[_version][7]:
+        if patchFolderCount != manifestList[_version][3]:
             print("\n破解补丁文件夹数量不一致！请关闭杀毒软件，重新解压下载器安装包！")
-        elif patchFileCount != manifestList[_version][6]:
+        elif patchFileCount != manifestList[_version][2]:
             print("\n破解补丁文件数量不一致！请关闭杀毒软件，重新解压下载器安装包！")
         elif patchFileCount > 0:
             print("\n破解补丁已安装成功！补丁文件数量："+str(patchFileCount)+" 文件夹数量："+str(patchFolderCount))
             
-        startGamePath = os.path.join(_gamePath, manifestList[_version][8])
-        if manifestList[_version][8] == "RainbowSixGame.exe":
+        startGamePath = os.path.join(_gamePath, manifestList[_version][6])
+        if manifestList[_version][6] == "RainbowSixGame.exe":
             if os.path.exists(startGamePath):
                 startGame = input("\n启动游戏的 exe 文件已准备好，是否启动游戏？(y/n)：")
                 startGame = startGame.lower()
@@ -180,23 +180,16 @@ def Main():
         else:
             _first = IsFirstDownload(_path, _version, _gamePath)
             
-            # if not os.path.exists("apps.txt"):#判断是否第一次运行
-                # os.system("lib\\dotnet-runtime-6.0.26-win-x64.exe -q")
-            if manifestList[_version][3]:
-                print("\n该版本需登录购买了《彩虹六号-围攻》的Steam账号才能下载或验证！")
-                steamUser = input("\n请输入你的Steam账号：")
-                print("\n 如第一次使用请在下面输入你的Steam密码：")
-                if _first:
-                    os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 359551 -manifest "+manifestList[_version][2]+" -dir "+_gamePath+" -user "+steamUser+" -remember-password")
-                else:
-                    os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 359551 -manifest "+manifestList[_version][2]+" -validate -dir "+_gamePath+" -user "+steamUser+" -remember-password")
-                    print("游戏文件完整性验证完毕！")
+            print("\n该版本需登录购买了《彩虹六号-围攻》的Steam账号才能下载或验证！")
+            steamUser = input("\n请输入你的Steam账号：")
+            print("\n 如第一次使用请在下面输入你的Steam密码：")
+            if _first:
+                os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -dir "+_gamePath+" -user "+steamUser+" -remember-password")
+                os.system("lib\\DepotDownloader.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -dir "+_gamePath+" -user "+steamUser+" -remember-password")
             else:
-                if _first:
-                    os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 359551 -manifest "+manifestList[_version][2]+" -dir "+_gamePath)
-                else:
-                    os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 359551 -manifest "+manifestList[_version][2]+" -validate -dir "+_gamePath)
-                    print("游戏文件完整性验证完毕！")
+                os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -validate -dir "+_gamePath+" -user "+steamUser+" -remember-password")
+                os.system("lib\\DepotDownloader.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -validate -dir "+_gamePath+" -user "+steamUser+" -remember-password")
+                print("游戏文件完整性验证完毕！")
             
             DownloadPatch(_version, _gamePath)
     elif gongNeng == "2":
