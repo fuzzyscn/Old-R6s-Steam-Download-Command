@@ -1,0 +1,17 @@
+{
+  "Username": "CHANGEUSERNAME",
+
+  "ProfileID": "00000000-0000-0000-0000-000000000000",
+
+  "Email": "ConfigMan@ubisoft.com",
+
+  "SavePath": "SAVE_GAMES",
+
+  "Language": "en-US",
+
+  "Offline": true,
+
+  "UseGameProductID": true,
+
+  "ProductID": 1337
+}

@@ -26,13 +26,13 @@ manifestList = {
     "Y4S4" : ["r6_y4s4_377237", "r6_y4s4_359551", 7, 0, "幻变潮汐行动 | 75.2 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "299124516841461614", "1842268638395240106"],
     "Y5S1" : ["r6_y5s1_377237", "r6_y5s1_359551", 7, 0, "虚空边境行动 | 74.3 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4736360397583523381", "6296533808765702678"],
     "Y5S2" : ["r6_y5s2_377237", "r6_y5s2_359551", 7, 0, "钢流行动 | 81.3 GB ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4367817844736324940", "893971391196952070"],
-    "Y5S3" : ["r6_y5s3_377237", "r6_y5s3_359551", 12, 0, "暗影传承行动 ", "Plazas\\CPlay", "RainbowSix.bat", "85893637567200342", "3089981610366186823"],
-    "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", 12, 0, "霓虹黎明行动（联机猎恐）", "Plazas\\CPlay", "RainbowSix.bat", "3390446325154338855", "6947060999143280245"],
+    "Y5S3" : ["r6_y5s3_377237", "r6_y5s3_359551", 9, 1, "暗影传承行动（支持全皮肤和地图编辑器）", "Plazas\\Y5S3", "RainbowSix.bat", "85893637567200342", "3089981610366186823"],
+    "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", 12, 0, "霓虹黎明行动", "Plazas\\CPlay", "RainbowSix.bat", "3390446325154338855", "6947060999143280245"],
     "Y6S1" : ["r6_y6s1_377237", "r6_y6s1_359551", 12, 0, "深红劫案行动 ", "Plazas\\CPlay", "RainbowSix.bat", "7890853311380514304", "7485515457663576274"],
     "Y6S2" : ["r6_y6s2_377237", "r6_y6s2_359551", 12, 0, "北极星行动 ", "Plazas\\CPlay", "RainbowSix.bat", "8733653062998518164", "809542866761090243"],
     "Y6S3" : ["r6_y6s3_377237", "r6_y6s3_359551", 11, 0, "晶坚守卫行动 ", "Plazas\\UPCR1", "RainbowSix.bat", "4859695099882698284", "6526531850721822265"],
     "Y6S4" : ["r6_y6s4_377237", "r6_y6s4_359551", 8, 0, "精兵锐器行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "2637055726475611418", "8627214406801860013"],
-    "Y7S1" : ["r6_y7s1_377237", "r6_y7s1_359551", 8, 0, "鬼面行动行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "8323869632165751287", "2178080523228113690"],
+    "Y7S1" : ["r6_y7s1_377237", "r6_y7s1_359551", 8, 0, "鬼面行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "8323869632165751287", "2178080523228113690"],
     "Y7S2" : ["r6_y7s2_377237", "r6_y7s2_359551", 8, 0, "矢量光影行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "1363132201391540345", "133280937611742404"],
     "Y7S3" : ["r6_y7s3_377237", "r6_y7s3_359551", 8, 0, "残蜂汹涌行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "6425223567680952075", "5906302942203575464"],
     "Y7S4" : ["r6_y7s4_377237", "r6_y7s4_359551", 9, 1, "烈日突袭行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "4466027729495813039", "1819898955518120444"],
@@ -44,15 +44,15 @@ manifestList = {
 def Help():
     print(
                 '''
-                ----功能 1《彩虹六号-围攻》国内下载器     (需登录购买了彩六游戏的Steam账号，多次下载可验证完整性)
-                ----功能 2《彩虹六号-围攻》国内下载器Pro  (免登录Steam，使用前需开启Steam加速器，无法验证完整性)
-                ----功能 3 打开地图模式皮肤修改器         (全皮肤最高支持到Y4S4)
+                ----功能 1《彩虹六号-围攻》国内下载器     (Y6S1之前及Y8S2免登录Steam账号，多次下载可验证完整性)
+                ----功能 2《彩虹六号-围攻》海外下载器     (此功能已弃用，请先尝试使用功能1下载器)
+                ----功能 3 打开地图模式皮肤修改器         (全皮肤最高支持到Y5S3)
                 ----功能 4 安装联机工具 OpenVPN           (搜房记录查询 https://skin.ppkok.com/r6/ )
                 ----功能 5 代理转发房主IP                 (搜不到房间时使用)
                 ----功能 6 显示当前网卡路由表             (搜不到房间时查看网卡优先级排错，看不懂请截图发群里)
                 
                 ----Made By Fuzzys QQ群：439523286
-                ----下载器当前版本: v 1.6
+                ----下载器当前版本: v 1.8
                 '''
     )
 
@@ -61,14 +61,14 @@ def DownloadPre():
     num = 0
     for ys in manifestList:
         num += 1
-        print("下载 "+ys+" 请输入序号 "+str(num))
+        print("下载 "+ys+" 请输入序号 "+str(num)+"\t"+manifestList[ys][4])
         versionList.append(ys)
     id = input("\n请输入要下载的《彩虹六号-围攻》赛季序号（不输默认为Y3S1）：") or 10
     return versionList[int(id)-1]
 
 def ChoosePath(_version):
     print("重要提示：必须选择英文路径文件夹来保存游戏！")
-    time.sleep(2)
+    time.sleep(1)
     root = tk.Tk()
     root.withdraw() #隐藏主窗口
     return filedialog.askdirectory()
@@ -99,7 +99,7 @@ def RunGame(filePath, cwdPath):
         
 def DownloadPatch(_version, _gamePath):
     try:
-        print("如上述出现 Failed Timeout 和 Error 字样请开启Steam社区加速器重试！")
+        print("如上述出现 Trying again (#10) 字样请开启Steam社区加速器重试！（302或UU路由模式）")
         name = input("\n下载验证完毕，为避免存档冲突及联机使用，请输入你的英文游戏昵称（不要直接回车！）：")
         name += '-'+_version
         patchFileCount = 0
@@ -110,6 +110,8 @@ def DownloadPatch(_version, _gamePath):
             srcPath = os.path.join(patchFilePath, file)
             dstPath = os.path.join(_gamePath, file)
             if os.path.isdir(srcPath):
+                if os.path.exists(dstPath):
+                    shutil.rmtree(dstPath)#提前删除已存在的补丁文件夹
                 shutil.copytree(srcPath, dstPath)
                 patchFolderCount += 1
             else:
@@ -121,6 +123,15 @@ def DownloadPatch(_version, _gamePath):
                             content = f.read()
                             modified_content = re.sub('CHANGEGAMENAME', name, content)
                             modified_content = re.sub('CHANGEUSERNAME', name, modified_content)
+                            f.close()
+                        with open(dstPath, 'wt') as f:
+                            f.write(modified_content)
+                            f.close()
+                if file.endswith('HeliosLoader.json'):#Y5S3 Heated Metal
+                    if os.path.exists(dstPath):
+                        with open(dstPath, 'rt') as f:
+                            content = f.read()
+                            modified_content = re.sub('CHANGEUSERNAME', name, content)
                             f.close()
                         with open(dstPath, 'wt') as f:
                             f.write(modified_content)
@@ -179,21 +190,39 @@ def Main():
             print("此路径下已有 "+str(_gamePath.count(_version)-1)+" 个 "+_version+" 文件夹，请重新选择首个 "+_version+" 文件夹的上一层来验证完整性！")
         else:
             _first = IsFirstDownload(_path, _version, _gamePath)
-            
-            print("\n该版本需登录购买了《彩虹六号-围攻》的Steam账号才能下载或验证！")
-            steamUser = input("\n请输入你的Steam账号：")
-            print("\n 如第一次使用请在下面输入你的Steam密码：")
-            if _first:
-                os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -dir "+_gamePath+" -user "+steamUser+" -remember-password")
-                os.system("lib\\DepotDownloader.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -dir "+_gamePath+" -user "+steamUser+" -remember-password")
+            if not os.path.exists("lib\\net9.txt"):#判断是否第一次运行
+                os.system("lib\\dotnet-runtime-9.0.3-win-x64.exe -q")
+                print("dotnet-9.0运行库安装成功！")
+                # 将文件名和路径作为参数传递给open()函数
+                file = open("lib\\net9.txt", "w")
+                file.write("dotnet-9.0 has installed.")
+                file.close()
+                #运行后需要创建一个net9.txt文件
+            mFile_1 = "lib\\depotcache\\377237_"+manifestList[_version][7]+".manifest"
+            mFile_2 = "lib\\depotcache\\359551_"+manifestList[_version][8]+".manifest"
+            if not os.path.exists(mFile_1):
+                print("\n该版本需登录购买了《彩虹六号-围攻》的Steam账号才能下载或验证！")
+                steamUser = input("\n请输入你的Steam账号：")
+                print("\n 如第一次使用请按提示输入你的Steam密码：")
+                if _first:
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -username "+steamUser+" -remember-password -dir "+_gamePath)
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -username "+steamUser+" -remember-password -dir "+_gamePath)
+                else:
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -username "+steamUser+" -remember-password -validate -dir "+_gamePath)
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -username "+steamUser+" -remember-password -validate -dir "+_gamePath)
+                    print("游戏文件完整性验证完毕！")
             else:
-                os.system("lib\\DepotDownloader.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -validate -dir "+_gamePath+" -user "+steamUser+" -remember-password")
-                os.system("lib\\DepotDownloader.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -validate -dir "+_gamePath+" -user "+steamUser+" -remember-password")
-                print("游戏文件完整性验证完毕！")
+                if _first:
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_1+" -dir "+_gamePath)
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_2+" -dir "+_gamePath)
+                else:
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_1+" -validate -dir "+_gamePath)
+                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_2+" -validate -dir "+_gamePath)
+                    print("游戏文件完整性验证完毕！")
             
             DownloadPatch(_version, _gamePath)
     elif gongNeng == "2":
-        #print("\n此模式仅支持中国大陆以外地区用户使用！\n国内想用请挂全局梯子！\n下载会消耗梯子流量！")
+        print("\n此模式仅支持中国大陆以外地区用户使用！\n国内想用请挂梯子或者UU路由模式！\n用302加速不行！")
         _version = DownloadPre()
         _path = ChoosePath(_version)
         _gamePath = os.path.join(_path, _version)
@@ -202,20 +231,24 @@ def Main():
             print("\n你选择的文件夹为："+_gamePath)
             print("此路径下已有 "+str(_gamePath.count(_version)-1)+" 个 "+_version+" 文件夹，请重新选择首个 "+_version+" 文件夹的上一层！")
         else:
-            # _first = IsFirstDownload(_path, _version, _gamePath)
+            _first = IsFirstDownload(_path, _version, _gamePath)
             
-            # keyFile = "depot_keys.json"#复制key到LOCAL APPDATA
-            # path_ProgrmData = os.getenv("LOCALAPPDATA")
-            # steamctlPath = path_ProgrmData+"\\steamctl\\steamctl\\"
-            # if not os.path.exists(steamctlPath):
-                # os.makedirs(steamctlPath)
-            # shutil.copy(os.path.join("lib\\manifestFiles\\", keyFile), os.path.join(steamctlPath, keyFile))
-            # time.sleep(1)
+            keyFile = "depot_keys.json"#复制key到LOCAL APPDATA
+            path_ProgrmData = os.getenv("LOCALAPPDATA")
+            steamctlPath = path_ProgrmData+"\\steamctl\\steamctl\\"
+            if not os.path.exists(steamctlPath):
+                os.makedirs(steamctlPath)
+            shutil.copy(os.path.join("lib\\manifestFiles\\", keyFile), os.path.join(steamctlPath, keyFile))
+            time.sleep(1)
             
             pythonPath = "lib\\python-3.12.3-embed-amd64\\python.exe"
-            os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][0]+" -k 55e7ea1db9a23f549c35553adb88ac3f97c1fc5f649df1515f5fa1dde7f501a6")
+            os.system(pythonPath+" -m steamctl depot download -f lib\\manifestFiles\\"+manifestList[_version][0]+" -o "+_gamePath+" --skip-licenses --skip-login --cell_id 4")
             time.sleep(1)
-            os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][1]+" -k b13d0908374e12054e73230c57da5d674dfe45cffe6ba7e11b3f1a8b155938d0")
+            os.system(pythonPath+" -m steamctl depot download -f lib\\manifestFiles\\"+manifestList[_version][1]+" -o "+_gamePath+" --skip-licenses --skip-login --cell_id 4")#1 2 5
+            #pythonPath = "lib\\python-3.12.3-embed-amd64\\python.exe"
+            #os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][0]+" -k 55e7ea1db9a23f549c35553adb88ac3f97c1fc5f649df1515f5fa1dde7f501a6")
+            #time.sleep(1)
+            #os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][1]+" -k b13d0908374e12054e73230c57da5d674dfe45cffe6ba7e11b3f1a8b155938d0")
             
             DownloadPatch(_version, _gamePath)
     elif gongNeng == "3":
@@ -230,7 +263,7 @@ def Main():
         installVpn = installVpn.lower()
         if installVpn == "y":
             subprocess.run(['start', "lib\\openvpn-install-2.4.8-I602-Win10.exe"], shell=True)
-            print("安装中... ... \n安装完毕后到QQ群：439523286 中下载联机节点文件client50120.ovpn导入既可连接群内联机服务器！")
+            print("安装中... ... \n安装完毕后到QQ群：439523286 中下载联机节点文件ChengDu-50120.ovpn导入既可连接群内联机服务器！")
     elif gongNeng == "5":
         y5y8 = input("\n你联机的版本是否是Y5-Y8？(y/n)：")
         y5y8 = y5y8.lower()
