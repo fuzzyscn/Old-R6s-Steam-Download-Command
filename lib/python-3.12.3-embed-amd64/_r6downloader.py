@@ -2,11 +2,15 @@ import os
 import re
 import time
 import shutil
+import datetime
+import threading
 import subprocess
 import tkinter as tk
+from tkinter import ttk
 from tkinter import filedialog
+from tkinter import messagebox
 
-manifestList = {
+version_map = {
     "Y1S0" : ["r6_y1s0_377237", "r6_y1s0_359551", 7, 0, "2015年初代 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "8358812283631269928", "3893422760579204530", "14.2 GB "],
     "Y1S1" : ["r6_y1s1_377237", "r6_y1s1_359551", 7, 0, "墨冰行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5188997148801516344", "7932785808040895147", "16.7 GB "],
     "Y1S2" : ["r6_y1s2_377237", "r6_y1s2_359551", 7, 0, "尘土战线 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "2303064029242396590", "2206497318678061176", "20.9 GB "],
@@ -41,63 +45,245 @@ manifestList = {
     "Y8S3" : ["r6_y8s3_377237", "r6_y8s3_359551", 9, 1, "开路先锋行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7845616952346988253", "7492642056657673136", "没有解锁全干员"],
 }
 
-def Help():
-    print(
-                '''
-                ----功能 1《彩虹六号-围攻》国内下载器     (Y6S1之前及Y8S2免登录Steam账号，多次下载可验证完整性)
-                ----功能 2《彩虹六号-围攻》海外下载器     (此功能已弃用，请先尝试使用功能1下载器)
-                ----功能 3 打开地图模式皮肤修改器         (全皮肤最高支持到Y5S3)
-                ----功能 4 安装联机工具 OpenVPN           (搜房记录查询 https://skin.ppkok.com/r6/ )
-                ----功能 5 代理转发房主IP                 (搜不到房间时使用)
-                ----功能 6 显示当前网卡路由表             (搜不到房间时查看网卡优先级排错，看不懂请截图发群里)
-                
-                ----Made By Fuzzys QQ群：439523286
-                ----下载器当前版本: v 1.8
-                '''
-    )
+def log_message(msg, level="info"):
+    now = datetime.datetime.now().strftime("%H:%M:%S")
+    tag = {"info": "💬", "error": "❌", "warn": "⚠️", "success": "✅"}
+    prefix = tag.get(level, "💬")
+    full_msg = f"[{now}] {prefix} {msg}\n"
+    text.insert(tk.END, full_msg, level)
+    text.see(tk.END)  # 自动滚动到底部
 
-def DownloadPre():
-    versionList = []
-    num = 0
-    for ys in manifestList:
-        num += 1
-        print("下载 "+ys+" 请输入序号 "+str(num)+"\t| "+manifestList[ys][4]+"\t| "+manifestList[ys][9])
-        versionList.append(ys)
-    id = input("\n请输入要下载的《彩虹六号-围攻》赛季序号（不输默认为Y3S1）：") or 10
-    return versionList[int(id)-1]
+def clear_log():
+    text.delete(1.0, tk.END)
+    log_message("日志已清空。", "warn")
 
-def ChoosePath(_version):
-    print("重要提示：必须选择英文路径文件夹来保存游戏！")
-    time.sleep(1)
-    root = tk.Tk()
-    root.withdraw() #隐藏主窗口
-    return filedialog.askdirectory()
+def save_log():
+    log_content = text.get(1.0, tk.END)
+    file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("文本文件", "*.txt")])
+    if file_path:
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(log_content)
+        log_message(f"日志已保存到：{file_path}", "success")
 
-def IsFirstDownload(_path, _version, _gamePath):
-    if _path:
-        print("\n游戏文件将下载到你选择的文件夹："+_gamePath)
-        if os.path.exists(_gamePath):
-            print("\n你选择的文件夹已安装赛季 "+_version+" "+manifestList[_version][4]+" 开始验证游戏完整性！")
+def show_help():
+    log_message("使用说明：请选择安装位置和赛季版本，然后点击开始下载。", "info")
+    log_message("Y6S1之前的赛季及Y8S2赛季免登录Steam账号，可验证完整性。", "info")
+
+def check_dotnet_runtime():
+    runtime_flag = os.path.exists("lib/net9.txt")
+    if not runtime_flag:
+        log_message("正在安装 .NET 9.0 运行库...", "warn")
+        try:
+            # 启动安装包
+            subprocess.run('lib\\dotnet-runtime-9.0.3-win-x64.exe', shell=True)
+            log_message("✔️ 安装完成。请继续选择安装路径。", "success")
+            # 创建标记文件
+            with open("lib/net9.txt", "w") as f:
+                f.write("dotnet 9.0 installed")
+        except Exception as e:
+            log_message(f"❌ 安装失败：{e}", "error")
             return False
-        else:
-            print("\n开始下载彩虹六号 "+_version+" "+manifestList[_version][4]) #+" 启动文件为：" + manifestList[_version][6])
-            return True
     else:
-        print("\n游戏文件将下载到当前文件夹！"+_gamePath)
-        if os.path.exists(_gamePath):
-            print("\n当前文件夹已安装赛季 "+_version+" "+manifestList[_version][4]+" 开始验证游戏完整性！")
-            return False
-        else:
-            print("\n开始下载彩虹六号 "+_version+" "+manifestList[_version][4]) #+" 启动文件为：" + manifestList[_version][6])
-            return True
+        log_message("✔️ 已检测到 .NET 9.0 运行库。", "success")
+    # 启用路径选择按钮
+    select_dir_button.config(state="normal")
+    return True
 
-def RunGame(filePath, cwdPath):
-    try:
-        subprocess.run(['start', filePath], shell=True, cwd=cwdPath)
-    except Exception as e:
-        print(e)
+start_time = time.time()  # 在下载开始时记录
+def update_progress_from_line(line):
+    match = re.search(r'(\d+(\.\d+)?)%', line)
+    if match:
+        raw_value = float(match.group(1))
+        percent = round(raw_value, 2)
+        progress_var.set(percent)
+
+        # 只显示已用时间
+        elapsed = time.time() - start_time
+        mins = int(elapsed // 60)
+        secs = int(elapsed % 60)
+        time_str = f"{mins:02}:{secs:02}"
+
+        progress_label.config(text=f"进度：{percent:.2f}% | 已用时间：{time_str}")
+        root.update_idletasks()
+
+def run_command_live(cmd):
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    for line in process.stdout:
+        log_message(line.strip(), "info")
+        update_progress_from_line(line)
+    process.wait()
+    if process.returncode != 0:
+        log_message("❌ 命令执行失败", "error")
+    else:
+        log_message("✅ 命令执行完成", "success")
+        progress_var.set(100)  # 任务完成后设置为100%
+
+def run_download(dir, version):
+    global start_time
+    start_time = time.time()
+    start_button.config(text="下载中...")    
+    start_button.config(state="disabled")
+    select_dir_button.config(state="disabled")
+    
+    install_path = dir
+    manifest1 = version_map[version][7]
+    manifest2 = version_map[version][8]
+    log_message(f"📁 游戏的安装路径: {install_path}")
+    log_message(f"🚀 开始下载赛季版本: {version}")
+
+    mFile_1 = f"lib\\depotcache\\377237_{manifest1}.manifest"
+    mFile_2 = f"lib\\depotcache\\359551_{manifest2}.manifest"
+
+    cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}"'
+    cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}"'
+
+    log_message("开始执行第一部分下载...", "warn")
+    run_command_live(cmd1)
+
+    log_message("开始执行第二部分下载...", "warn")
+    run_command_live(cmd2)
+    #log_message(cmd2)
+
+    log_message("🎉 下载任务全部完成！", "success")
+    
+    if messagebox.askyesno("任务完成", "下载完成，是否打开文件夹？"):
+        os.startfile(install_path)
         
-def DownloadPatch(_version, _gamePath):
+    start_button.config(text="开始下载")
+    start_button.config(state="normal")
+    select_dir_button.config(state="normal")
+
+def run_verify(dir, version):
+    global start_time
+    start_time = time.time()
+    start_button.config(text="验证中...")
+    start_button.config(state="disabled")
+    select_dir_button.config(state="disabled")
+
+    install_path = dir
+    manifest1 = version_map[version][7]
+    manifest2 = version_map[version][8]
+    log_message(f"📁 游戏的安装路径: {install_path}")
+    log_message(f"🚀 开始验证完整性: {version}")
+
+    mFile_1 = f"lib\\depotcache\\377237_{manifest1}.manifest"
+    mFile_2 = f"lib\\depotcache\\359551_{manifest2}.manifest"
+
+    cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}"'
+    cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}"'
+
+    log_message("开始执行第一部分验证...", "warn")
+    run_command_live(cmd1)
+
+    log_message("开始执行第二部分验证...", "warn")
+    run_command_live(cmd2)
+    #log_message(cmd2)
+
+    log_message("🎉 验证完整性全部完成！", "success")
+    
+    if messagebox.askyesno("任务完成", "下载完成，是否打开文件夹？"):
+        os.startfile(install_path)
+        
+    start_button.config(text="验证完整性")
+    start_button.config(state="normal")
+    select_dir_button.config(state="normal")
+
+def download_game(folder, version):
+    threading.Thread(target=run_download, args=(folder, version), daemon=True).start()
+
+def verify_files(folder, version):
+    threading.Thread(target=run_verify, args=(folder, version), daemon=True).start()
+
+def has_existing_game_files(folder):
+    required_files = ["defaultargs.dll", "rainbowsix.exe", "rainbowsixgame.exe"]
+    for filename in required_files:
+        if os.path.exists(os.path.join(folder, filename)):
+            return True
+    return False
+
+def select_dir(entry):
+    dir = filedialog.askdirectory()
+    entry.delete(0, tk.END)
+    entry.insert(0, dir)
+
+    # 路径格式检查
+    if re.search(r'[\u4e00-\u9fff]', dir) or ' ' in dir:
+        messagebox.showerror("路径错误", "路径不可包含中文或空格，请重新选择英文路径。")
+        log_message("路径错误：包含中文或空格", "error")
+        entry.delete(0, tk.END)
+        start_button.config(state="disabled")
+        return
+
+    # 检查文件夹是否为空
+    if not os.listdir(dir):
+        log_message(f"安装路径验证成功：准备下载到 {dir}", "success")
+        start_button.config(text="开始下载")
+        start_button.config(command=lambda: download_game(dir, entry1.get().split()[0]))
+        start_button.config(state="normal")
+    else:
+        if has_existing_game_files(dir):
+            log_message("检测到游戏文件：进入验证模式🔍", "info")
+            start_button.config(text="验证完整性")
+            start_button.config(command=lambda: verify_files(dir, entry1.get().split()[0]))
+            start_button.config(state="normal")
+        else:
+            messagebox.showerror("安装目录无效", "请选择空文件夹或包含游戏文件的目录。")
+            log_message("目录非空且无游戏文件", "error")
+            entry.delete(0, tk.END)
+            start_button.config(state="disabled")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.geometry("600x600")
+    root.title("彩虹六号旧版本下载器 v2.0 By Fuzzys QQ群：439523286")
+    root.grid_rowconfigure(4, weight=1)
+    root.grid_columnconfigure(1, weight=1)
+
+    ttk.Label(root, text='请选择安装文件夹：').grid(row=0, column=0)
+    entry0 = ttk.Entry(root, width=37)
+    entry0.grid(row=0, column=1)
+    entry0.insert(0, "安装路径必须是纯英文且没有空格")
+
+    select_dir_button = ttk.Button(root, text='选择', command=lambda: select_dir(entry0))
+    select_dir_button.grid(row=0, column=2)
+    select_dir_button.config(state="disabled")  # 初始禁用
+
+    ttk.Label(root, text='请选择赛季版本：').grid(row=1, column=0)
+    version_display_map = {k: f"{k} {v[4]+v[9]}" for k, v in version_map.items()}
+    version_names = list(version_display_map.values())
+    version_var = tk.StringVar()
+    entry1 = ttk.Combobox(root, textvariable=version_var, values=version_names, state="readonly", width=35)
+    entry1.grid(row=1, column=1)
+    entry1.set(version_display_map["Y3S1"])  # 设置默认名称
+    start_button = ttk.Button(root, text='开始下载')
+    start_button.grid(row=1, column=2)
+    start_button.config(state="disabled")  # 初始禁用
+
+    ttk.Button(root, text="清空日志", command=clear_log).grid(row=5, column=0, pady=5)
+    ttk.Button(root, text="保存日志", command=save_log).grid(row=5, column=2, pady=5)
+
+    global text
+    text = tk.Text(root, width=80, height=20)
+    text.grid(row=4,columnspan=3)
+    # 设置颜色标签
+    text.tag_config("info", foreground="blue")
+    text.tag_config("success", foreground="green")
+    text.tag_config("error", foreground="red")
+    text.tag_config("warn", foreground="orange")
+    text.grid(row=4, columnspan=3, sticky="nsew")
+    
+    check_dotnet_runtime()  # 启动时检测并决定是否启用按钮
+    show_help()
+
+    progress_var = tk.DoubleVar()
+    progressbar = ttk.Progressbar(root, variable=progress_var, orient="horizontal", length=500, mode="determinate")
+    progressbar.grid(row=6, columnspan=3, pady=(0, 10))
+    progress_label = ttk.Label(root, text="进度：0% | 已用时间：--:--")
+    progress_label.grid(row=5, columnspan=3)
+
+    root.mainloop()
+
+def AddPatch(_version, _gamePath):
     try:
         print("如上述出现 Trying again (#10) 字样请开启Steam社区加速器重试！（302或UU路由模式）")
         name = input("\n下载验证完毕，为避免存档冲突及联机使用，请输入你的英文游戏昵称（不要直接回车！）：")
@@ -276,9 +462,3 @@ def Main():
         os.system("route print -4")
     else:
         print('\n                ----请输入提示的功能编号！！！')
-    Help()    
-    Main()
-    
-if __name__ == "__main__":
-    Help()
-    Main()
