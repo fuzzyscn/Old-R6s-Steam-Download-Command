@@ -1,0 +1,2 @@
+覆盖Y5S3原版文件后点bat文件启动游戏
+HeliosLoader.json 第二行可以改玩家游戏名

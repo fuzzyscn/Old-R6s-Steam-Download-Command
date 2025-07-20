@@ -18,7 +18,6 @@ global enum eGamestate
 	InGame,          // 7 In-Game
 }
 
-
 global enum eTeam
 {
 	A,
@@ -42,6 +41,8 @@ global enum eItemSlot
 {
 	Primary,
 	Secondary,
+	Tertiary,
+
 	PrimaryGadget,
 	SecondaryGadget,
 	Character // Causes bugs use with caution
@@ -77,13 +78,13 @@ global enum eDamageType
 	Regeneration,
 	Unknown,
 	Debris,
-	ThrownObjec,
+	ThrownObject,
 	BledOut,
 	Gas,
 	ThermalExplosion,
 	MeleeGadget,
 	BarbedWire,
-	Electric
+	Electric,
 	Reinforcement,
 	FragExplosion,
 	Paralyzed,
@@ -99,17 +100,91 @@ global enum eDamageType
 	ContactExplosion,
 	Flash,
 	ParasiteSpike,
-	Value_29,
-	Value_30,
-	Value_31,
-	Value_32,
-	Value_33,
-	Value_34,
-	Value_35,
+	Laser,
+	Concussion,
+	BlowTorch,
+	TaserShield,
+	ReverseFriendlyFire,
+	SelfDestroyed,
+	AreaControl,
 	Fire,
-	Value_37,
-	Value_38,
+	BreachKick,
+	BreakWall
 }
+
+global enum eEntityEffect
+{
+	NotAffected,
+	Flashed,
+	Smoked,
+	Gased,
+	InBarbedWire,
+	GrenadeProximity,
+	Electrocuted,
+	Concussioned,
+	SonicBurstAffected,
+	InNetTrap,
+	Deafened,
+	StunnedByNetTrap,
+	Boosted,
+	Hunt,
+	Disrupted,
+	Caltropped,
+	Attracted,
+	LeaderBuff,
+	Rooted,
+	PreBoost,
+	RootingAreaPreWarning,
+	Bloodlust,
+	LogicBomb,
+	Meleed,
+	LogicBombCameraFX,
+	LogicBombStopUsingCamera,
+	FullBoost,
+	CaltropDOT,
+	TagDeviceWarning,
+	TagDeviceScanning,
+	AudioAlarmAffected,
+	EpiShot,
+	HighlightedWithOutline,
+	TagDeviceRevealed,
+	LaserAffected,
+	TaserShieldEnter,
+	TaserShieldExit,
+	BlowTorchSlowdown,
+	UsingTaserShield,
+	Stealth,
+	PushBack,
+	NeuropathyDistance,
+	LogicBombExit,
+	LogicBombExitByDuration,
+	SmartGlasses,
+	CameraInvisibility,
+	CameraGlitch,
+	CameraGlitchOutro,
+	SilentStep,
+	CameraInvisibilityObservationToolFeedback,
+	CameraInvisibilityOutro,
+	FireDOT,
+	SmokeOpacityReduction,
+	Value_53,
+	Dash,
+	WeakConcussion,
+	ClimbHatch,
+	ControllableDecoy,
+	ControllableDecoyDeploy,
+	ControllingControllableDecoy,
+	JammerWarning
+	BreakWall_DEPRECATED,
+	PostDash,
+	PostClimbHatch,
+	LowFrequencySound,
+	LowFrequencySoundOutro,
+	ControllableDecoyDeployFailed,
+	PostControllingControllableDecoy,
+	WaterBreachSplash,
+	LaserDOT,
+};
 
 global enum eMap
 {
@@ -142,32 +217,41 @@ global enum eMap
 global enum eTimeOfDay
 {
 	Default       = 0xA45F6E8E,
-	Day_Default   = 0xA45F7850,
-	Night_Default = 0xA45F7851,
 	SmokeMode     = 0x637399FB,
+
+	Day_Default   = 0xA45F7850,
 	Day           = 0x19438604,
+
+	Night_Default = 0xA45F7851,
 	Night         = 0x19438605,
-	Halloween     = 0x2450CDB74D,
 }
 
-global enum eCaliber {
-	Invalid_Caliber = 0x0,        // Invalid Caliber (Should result in a default caliber)
-	Blowtorch       = 0x7CFE9C27, // Mavericks Blowtorch
-	DP27            = 0x8616E1E0, // Tachanka's DP27
-	DP27_Turret     = 0x033BC036, // Tachanka's DP27 (Stationary Turret)
-	Kali_Sniper     = 0xDB87EF30, // Kali's Sniper Rifle CRX300 / Golden Gun
-	Skeletonkey     = 0x487C2569, // Buck's Skeleton Key
-	Generic_Pistol  = 0x0D67F306, // Normal Pistol
-	Generic_Rifle   = 0xE6589B1F, // Normal Rifle
-	Generic_Smg     = 0x617A0088, // Normal SMG
-};
-
-
-
-global enum eWeapon
+global enum eCaliber
 {
-	DeathMachine = 0x0
-}
+	None,
+
+	// Bullet
+	Bullet_SuperLow = 0xD67F306,
+	Bullet_Low = 0x617A0088,
+	Bullet_Mid = 0xE6589B1F,
+	Bullet_High = 0x95773E2,
+	Bullet_SuperHigh = 0x33BC036,
+	Bullet_MaxPower = 0xC5F80148,
+
+	Bullet_BOSG = 0x5E9182B4,
+	Bullet_CSRX300 = 0xDB87EF30,
+	Bullet_DMR = 0x7887498A,
+	Bullet_DP27 = 0x8616E1E0,
+
+	// Shell
+	Shell_Low = 0x4E56EB23,
+	Shell_Mid = 0xC97470B4,
+	Shell_High = 0x487C2569,
+
+	// Gadget
+	Gadget_BarrageTurret = 0x6B541DED,
+	Gadget_BlowTorch = 0x7CFE9C27,
+};
 
 global enum eCharacter
 {
@@ -233,11 +317,19 @@ global enum eCharacter
 	RECRUITDEF = 0x45AC0BAA4B,
 
 	// HM Operators
-	SPECTER    = 0x45B110AA4B,
-	DEADEYE    = 0x45B110BA36,
-	BAPHOMET   = 0x45B110CA36,
-	JADE       = 0x37853246BE,
-	MIRAGE     = 0x37853256BE,
+
+	// ATK
+	DEADEYE    = 0x95AC10BA36,
+	BAPHOMET   = 0x95AC10CA36,
+	XRAY       = 0x95AC10FA36,
+	CHAOS      = 0x95AC112A36
+
+	// DEF
+	SPECTER    = 0x95AC10AA4B,
+	JADE       = 0x87803246BE,
+	MIRAGE     = 0x95AC10EA4B,
+	MONARCH    = 0x95AC110A4B,
+	RAZOR      = 0x95AC111A4B,
 }
 
 global enum eBone

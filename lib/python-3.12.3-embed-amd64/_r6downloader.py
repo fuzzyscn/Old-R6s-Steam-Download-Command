@@ -2,13 +2,16 @@ import os
 import re
 import time
 import shutil
+import psutil
 import datetime
 import threading
+import webbrowser
 import subprocess
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import simpledialog
 
 version_map = {
     "Y1S0" : ["r6_y1s0_377237", "r6_y1s0_359551", 7, 0, "2015年初代 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "8358812283631269928", "3893422760579204530", "14.2 GB "],
@@ -31,7 +34,7 @@ version_map = {
     "Y5S1" : ["r6_y5s1_377237", "r6_y5s1_359551", 7, 0, "虚空边境行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4736360397583523381", "6296533808765702678", "74.3 GB "],
     "Y5S2" : ["r6_y5s2_377237", "r6_y5s2_359551", 7, 0, "钢流行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4367817844736324940", "893971391196952070", "81.3 GB "],
     "Y5S3" : ["r6_y5s3_377237", "r6_y5s3_359551", 9, 1, "暗影传承行动 ", "Plazas\\Y5S3", "RainbowSix.bat", "85893637567200342", "3089981610366186823", "支持全皮肤和地图编辑器 "],
-    "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", 12, 0, "霓虹黎明行动", "Plazas\\CPlay", "RainbowSix.bat", "3390446325154338855", "6947060999143280245", " "],
+    "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", 9, 1, "霓虹黎明行动 ", "Plazas\\Y5S4", "RainbowSix.bat", "3390446325154338855", "6947060999143280245", "支持全皮肤和地图编辑器 "],
     "Y6S1" : ["r6_y6s1_377237", "r6_y6s1_359551", 12, 0, "深红劫案行动 ", "Plazas\\CPlay", "RainbowSix.bat", "7890853311380514304", "7485515457663576274", " "],
     "Y6S2" : ["r6_y6s2_377237", "r6_y6s2_359551", 12, 0, "北极星行动 ", "Plazas\\CPlay", "RainbowSix.bat", "8733653062998518164", "809542866761090243", " "],
     "Y6S3" : ["r6_y6s3_377237", "r6_y6s3_359551", 11, 0, "晶坚守卫行动 ", "Plazas\\UPCR1", "RainbowSix.bat", "4859695099882698284", "6526531850721822265", " "],
@@ -43,7 +46,29 @@ version_map = {
     "Y8S1" : ["r6_y8s1_377237", "r6_y8s1_359551", 9, 1, "头号指令行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "3275824905781062648", "5863062164463920572", " "],
     "Y8S2" : ["r6_y8s2_377237", "r6_y8s2_359551", 9, 1, "恐惧因素行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "3050554908913191669", "1575870740329742681", "全干员孤狼猎恐"],
     "Y8S3" : ["r6_y8s3_377237", "r6_y8s3_359551", 9, 1, "开路先锋行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7845616952346988253", "7492642056657673136", "没有解锁全干员"],
+    "Y8S4" : ["r6_y8s4_377237", "r6_y8s4_359551", 9, 1, "极度深寒行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7646647065987620875", "4957295777170965935", "未测试 不推荐下载"],
+    "Y9S1" : ["r6_y9s1_377237", "r6_y9s1_359551", 9, 1, "绝命征兆行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "1959067516419454682", "1140469899661941149", "未测试 不推荐下载"],
+    "Y9S4" : ["r6_y9s4_377237", "r6_y9s4_359551", 9, 1, "碰撞行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7684058120163063592", "2666276619654974788", "未测试 不推荐下载"],
 }
+
+def get_real_time_net_speed(interval=1):
+    old = psutil.net_io_counters()
+    time.sleep(interval)
+    new = psutil.net_io_counters()
+
+    down_bytes = new.bytes_recv - old.bytes_recv
+    up_bytes = new.bytes_sent - old.bytes_sent
+
+    down_speed = down_bytes / interval / (1024 * 1024)  # MB/s
+    up_speed = up_bytes / interval / (1024 * 1024)      # MB/s
+
+    return round(down_speed, 2), round(up_speed, 2)
+    
+def update_net_speed():
+    while True:
+        down, up = get_real_time_net_speed()
+        speed_label.config(text=f"下载：{down:.2f} MB/s | 上传：{up:.2f} MB/s")
+        root.update_idletasks()
 
 def log_message(msg, level="info"):
     now = datetime.datetime.now().strftime("%H:%M:%S")
@@ -67,7 +92,8 @@ def save_log():
 
 def show_help():
     log_message("使用说明：请选择安装位置和赛季版本，然后点击开始下载。", "info")
-    log_message("Y6S1之前的赛季及Y8S2赛季免登录Steam账号，可验证完整性。", "info")
+    log_message("支持免登录下载Y6S1之前的赛季及Y8S2赛季，可验证完整性。", "info")
+    log_message("如出现 Trying again (#1)，请开启 Steam 社区加速器后重试。💡", "warn")
 
 def check_dotnet_runtime():
     runtime_flag = os.path.exists("lib/net9.txt")
@@ -106,6 +132,75 @@ def update_progress_from_line(line):
         progress_label.config(text=f"进度：{percent:.2f}% | 已用时间：{time_str}")
         root.update_idletasks()
 
+def AddPatchGUI(version, game_path):
+    start_button.config(state="normal")
+    select_dir_button.config(state="normal")
+    try:
+        nickname = simpledialog.askstring("个性化昵称", "请输入你的英文游戏昵称（建议不要中文或空格）：")
+        if not nickname:
+            log_message("⚠️ 未输入昵称，跳过补丁修改", "warn")
+            nickname = "Player"
+
+        nickname += "-" + version
+        patch_path = os.path.join("lib", version_map[version][5])
+        patch_files = os.listdir(patch_path)
+        folder_count = 0
+        file_count = 0
+
+        for file in patch_files:
+            src = os.path.join(patch_path, file)
+            dst = os.path.join(game_path, file)
+
+            if os.path.isdir(src):
+                if os.path.exists(dst):
+                    shutil.rmtree(dst)
+                shutil.copytree(src, dst)
+                folder_count += 1
+            else:
+                shutil.copy(src, dst)
+                file_count += 1
+
+                if file.endswith(".ini") and file != "steam_emu.ini":
+                    with open(dst, 'r') as f:
+                        content = f.read()
+                    content = content.replace("CHANGEGAMENAME", nickname).replace("CHANGEUSERNAME", nickname)
+                    with open(dst, 'w') as f:
+                        f.write(content)
+
+                if file.endswith("HeliosLoader.json"):
+                    with open(dst, 'r') as f:
+                        content = f.read()
+                    content = content.replace("CHANGEUSERNAME", nickname)
+                    with open(dst, 'w') as f:
+                        f.write(content)
+
+        # 完整性核验
+        expected_file_count = version_map[version][2]
+        expected_folder_count = version_map[version][3]
+        if file_count != expected_file_count:
+            log_message("❌ 补丁文件数量异常，请关闭杀毒软件并重新解压下载器", "error")
+        elif folder_count != expected_folder_count:
+            log_message("❌ 补丁文件夹数量异常，请关闭杀毒软件并重新解压下载器", "error")
+        else:
+            log_message(f"✅ 补丁安装成功：{file_count}个文件，{folder_count}个文件夹", "success")
+
+        # 提示是否启动游戏
+        exe_name = version_map[version][6]
+        exe_path = os.path.join(game_path, exe_name)
+        if not os.path.exists(exe_path):  # 如果主启动文件不存在，试试备用名
+            exe_path = os.path.join(game_path, "rainbowsix.exe")
+        if os.path.exists(exe_path):
+            if messagebox.askyesno("启动游戏", "补丁已安装完毕，是否启动游戏？"):
+                log_message("🎮 正在启动游戏...", "info")
+                os.startfile(exe_path)
+            else:
+                log_message("🎮 用户选择稍后启动游戏", "info")
+        else:
+            log_message("❌ 未找到启动文件，请验证游戏完整性", "error")
+
+    except Exception as e:
+        log_message(f"❌ 补丁出错：{e}", "error")
+
 def run_command_live(cmd):
     process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     for line in process.stdout:
@@ -121,9 +216,6 @@ def run_command_live(cmd):
 def run_download(dir, version):
     global start_time
     start_time = time.time()
-    start_button.config(text="下载中...")    
-    start_button.config(state="disabled")
-    select_dir_button.config(state="disabled")
     
     install_path = dir
     manifest1 = version_map[version][7]
@@ -133,32 +225,32 @@ def run_download(dir, version):
 
     mFile_1 = f"lib\\depotcache\\377237_{manifest1}.manifest"
     mFile_2 = f"lib\\depotcache\\359551_{manifest2}.manifest"
+    # 🔍 如果 manifest 文件不存在，提示 Steam 登录
+    if not os.path.exists(mFile_1):
+        log_message("⚠️ 该版本需要登录购买了《彩虹六号：围攻》的 Steam 账号才能下载或验证！\n请使用下载器1.8命令行版本下载或验证。", "error")
+    else:
+        start_button.config(text="下载中...")
+        start_button.config(state="disabled")
+        select_dir_button.config(state="disabled")
+        cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}"'
+        cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}"'
 
-    cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}"'
-    cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}"'
+        log_message("开始执行第一部分下载...", "warn")
+        run_command_live(cmd1)
 
-    log_message("开始执行第一部分下载...", "warn")
-    run_command_live(cmd1)
+        log_message("开始执行第二部分下载...", "warn")
+        run_command_live(cmd2)
+        log_message(cmd2)
 
-    log_message("开始执行第二部分下载...", "warn")
-    run_command_live(cmd2)
-    #log_message(cmd2)
-
-    log_message("🎉 下载任务全部完成！", "success")
-    
-    if messagebox.askyesno("任务完成", "下载完成，是否打开文件夹？"):
-        os.startfile(install_path)
+        log_message("🎉 下载任务全部完成！", "success")
         
-    start_button.config(text="开始下载")
-    start_button.config(state="normal")
-    select_dir_button.config(state="normal")
+        # 补丁由主线程调用
+        root.after(100, lambda: AddPatchGUI(version, install_path))
+        start_button.config(text="开始下载")
 
 def run_verify(dir, version):
     global start_time
     start_time = time.time()
-    start_button.config(text="验证中...")
-    start_button.config(state="disabled")
-    select_dir_button.config(state="disabled")
 
     install_path = dir
     manifest1 = version_map[version][7]
@@ -168,31 +260,36 @@ def run_verify(dir, version):
 
     mFile_1 = f"lib\\depotcache\\377237_{manifest1}.manifest"
     mFile_2 = f"lib\\depotcache\\359551_{manifest2}.manifest"
+    # 🔍 如果 manifest 文件不存在，提示 Steam 登录
+    if not os.path.exists(mFile_1):
+        log_message("⚠️ 该版本需要登录购买了《彩虹六号：围攻》的 Steam 账号才能下载或验证！\n请使用下载器1.8命令行版本下载或验证。", "error")
+    else:
+        start_button.config(text="验证中...")
+        start_button.config(state="disabled")
+        select_dir_button.config(state="disabled")
+        cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}"'
+        cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}"'
 
-    cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}"'
-    cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}"'
+        log_message("开始执行第一部分验证...", "warn")
+        run_command_live(cmd1)
 
-    log_message("开始执行第一部分验证...", "warn")
-    run_command_live(cmd1)
+        log_message("开始执行第二部分验证...", "warn")
+        run_command_live(cmd2)
 
-    log_message("开始执行第二部分验证...", "warn")
-    run_command_live(cmd2)
-    #log_message(cmd2)
-
-    log_message("🎉 验证完整性全部完成！", "success")
-    
-    if messagebox.askyesno("任务完成", "下载完成，是否打开文件夹？"):
-        os.startfile(install_path)
+        log_message("🎉 验证完整性全部完成！", "success")
         
-    start_button.config(text="验证完整性")
-    start_button.config(state="normal")
-    select_dir_button.config(state="normal")
+        # 补丁由主线程调用
+        root.after(100, lambda: AddPatchGUI(version, install_path))
+
+        start_button.config(text="验证完整性")
 
 def download_game(folder, version):
     threading.Thread(target=run_download, args=(folder, version), daemon=True).start()
+    threading.Thread(target=update_net_speed, daemon=True).start()
 
 def verify_files(folder, version):
     threading.Thread(target=run_verify, args=(folder, version), daemon=True).start()
+    threading.Thread(target=update_net_speed, daemon=True).start()
 
 def has_existing_game_files(folder):
     required_files = ["defaultargs.dll", "rainbowsix.exe", "rainbowsixgame.exe"]
@@ -232,31 +329,166 @@ def select_dir(entry):
             entry.delete(0, tk.END)
             start_button.config(state="disabled")
 
+def ping_host_async(host_ip):
+    def worker():
+        try:
+            result = subprocess.run(
+                f"ping {host_ip} -n 8",
+                shell=True,
+                text=True,
+                capture_output=True,
+                encoding="gbk",
+                errors="ignore"
+            )
+            output = result.stdout
+            for line in output.splitlines():
+                if line.strip():
+                    log_message(line.strip(), "info")
+
+            if "TTL=" in output or "TTL=" in output.upper():
+                log_message("✅ 连通性测试成功，房主可达！", "success")
+            else:
+                log_message("⚠️ 房主不可达，请确认 VPN 是否连接正确", "warn")
+
+        except Exception as e:
+            log_message(f"❌ ping 出错：{e}", "error")
+
+    threading.Thread(target=worker, daemon=True).start()
+
+def is_valid_ip(ip):
+    pattern = r"^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\." \
+              r"(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\." \
+              r"(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\." \
+              r"(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)$"
+    return re.match(pattern, ip) is not None
+
+def ask_ping_ip():
+    top = tk.Toplevel(root)
+    top.title("测试到房主延迟")
+    top.geometry("300x140")
+    top.resizable(False, False)
+
+    ttk.Label(top, text="请输入房主虚拟局域网 IP：").pack(pady=(10, 5))
+    ip_entry = ttk.Entry(top, width=22)
+    ip_entry.pack()
+
+    def run_test():
+        ip = ip_entry.get().strip()
+        if not is_valid_ip(ip):
+            messagebox.showerror("格式错误", "请输入合法 IPv4 地址，例如：192.168.200.2")
+            return
+        log_message(f"📡 正在 ping 房主 IP {ip}，请稍候...", "info")
+        ping_host_async(ip)
+        top.destroy()
+
+    ttk.Button(top, text="开始测试", command=run_test).pack(pady=10)
+
+def run_forwarding():
+    top = tk.Toplevel(root)
+    top.title("启动联机转发")
+    top.geometry("320x200")
+    top.resizable(False, False)
+
+    ttk.Label(top, text="请选择联机版本：").pack(pady=(10, 5))
+
+    version_var = tk.StringVar(value="y5y8")
+    ttk.Radiobutton(top, text="Y1-Y4 版本", variable=version_var, value="y1y4").pack()
+    ttk.Radiobutton(top, text="Y5-Y8 版本", variable=version_var, value="y5y8").pack()
+
+    ttk.Label(top, text="请输入房主虚拟局域网 IP：").pack(pady=(10, 5))
+    ip_entry = ttk.Entry(top, width=24)
+    ip_entry.pack()
+
+    def launch_forwarding():
+        host_ip = ip_entry.get().strip()
+
+        if not is_valid_ip(host_ip):
+            log_message("❌ IP 格式不合法，请输入类似 192.168.200.2 的地址", "error")
+            messagebox.showerror("格式错误", "请输入合法的 IPv4 地址，例如：192.168.200.2")
+            return
+
+        selected = version_var.get()
+        cmd = f'lib\\NetworkedR6.exe {host_ip}{" -p 6200" if selected == "y5y8" else ""}'
+        log_message(f"🚀 正在执行联机转发命令：{cmd}", "info")
+
+        def run_cmd_in_thread():
+            try:
+                process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding="gbk", errors="ignore")
+                for line in process.stdout:
+                    if line.strip():
+                        log_message(line.strip(), "info")
+            except Exception as e:
+                log_message(f"❌ 联机转发失败：{e}", "error")
+
+        threading.Thread(target=run_cmd_in_thread, daemon=True).start()
+        top.destroy()
+
+    ttk.Button(top, text="启动", command=launch_forwarding).pack(pady=12)
+
+def show_route_to_log():
+    try:
+        # 使用 gbk 编码（或 mbcs）读取结果，避免中文乱码
+        result = subprocess.check_output("route print -4", shell=True, encoding="gbk", errors="ignore")
+        log_message("📡 当前 IPv4 路由信息如下：", "info")
+        for line in result.splitlines():
+            if line.strip():
+                log_message(line.strip(), "info")
+    except Exception as e:
+        log_message(f"❌ 获取路由信息失败：{e}", "error")
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("600x600")
-    root.title("彩虹六号旧版本下载器 v2.0 By Fuzzys QQ群：439523286")
+    root.title("彩虹六号旧版本下载器 By Fuzzys QQ群：439523286")
     root.grid_rowconfigure(4, weight=1)
     root.grid_columnconfigure(1, weight=1)
+    
+    # 创建菜单栏
+    menu_bar = tk.Menu(root)
+    root.config(menu=menu_bar)
+    online_menu = tk.Menu(menu_bar, tearoff=0)
+    online_menu.add_command(label="安装联机VPN", command=lambda: subprocess.Popen("lib\\openvpn-install-2.4.8-I602-Win10.exe", shell=True))
+    online_menu.add_command(label="启动联机转发", command=run_forwarding)
+    online_menu.add_command(label="测试到房主延迟", command=ask_ping_ip)
+    online_menu.add_command(label="查看当前路由", command=show_route_to_log)
+    vpn_tishi = "安装完毕后到QQ群：439523286 中\n下载联机节点文件50120.ovpn\n导入后既可同群友联机！"
+    online_menu.add_command(label="VPN使用提示", command=lambda: [messagebox.showinfo("提示", vpn_tishi),log_message(vpn_tishi)])
+    menu_bar.add_cascade(label="联机工具", menu=online_menu)
+    
+    modifier_menu = tk.Menu(menu_bar, tearoff=0)
+    modifier_menu.add_command(label="启动Y1-Y4修改器", command=lambda: subprocess.Popen("lib\\R6_Liberator_0.0.0.22.exe", shell=True))
+    modifier_menu.add_command(label="启动Y5修改器", command=lambda: subprocess.Popen("lib\\Y5_xiu_gai_qi.exe", shell=True))
+    xiugaiqi_tishi = "建好房间后房主展开地图模式双击最终选项即可\nY5修改器同理，选好后需要点击Send to Siege"
+    modifier_menu.add_command(label="使用提示", command=lambda: [messagebox.showinfo("提示", xiugaiqi_tishi),log_message(xiugaiqi_tishi)])
+    menu_bar.add_cascade(label="修改器", menu=modifier_menu)
 
-    ttk.Label(root, text='请选择安装文件夹：').grid(row=0, column=0)
+    about_menu = tk.Menu(menu_bar, tearoff=0)
+    about_menu.add_command(label="作者：Fuzzys_cn", command=lambda: [messagebox.showinfo("作者主页", "B站ID：Fuzzys_cn\nQQ群：439523286"),webbrowser.open_new("https://space.bilibili.com/22525010")])
+    about_menu.add_command(label="访问官网", command=lambda: webbrowser.open_new("https://r6.002.hk/index"))
+    about_menu.add_command(label="访问R6聊天室", command=lambda: webbrowser.open_new("https://chat.002.hk/R6Tools-chat/"))
+    about_menu.add_separator()
+    about_menu.add_command(label="捐助开发", command=lambda: os.startfile("lib\\zanzhu.png"))
+    about_menu.add_command(label="程序版本：v2.0", command=lambda: messagebox.showinfo("版本信息", "当前版本：v2.0 \n获取最新信息请加入QQ群：439523286"))
+    menu_bar.add_cascade(label="关于", menu=about_menu)
+
+    ttk.Label(root, text="请选择安装文件夹：").grid(row=1, column=0)
     entry0 = ttk.Entry(root, width=37)
-    entry0.grid(row=0, column=1)
+    entry0.grid(row=1, column=1)
     entry0.insert(0, "安装路径必须是纯英文且没有空格")
 
     select_dir_button = ttk.Button(root, text='选择', command=lambda: select_dir(entry0))
-    select_dir_button.grid(row=0, column=2)
+    select_dir_button.grid(row=1, column=2)
     select_dir_button.config(state="disabled")  # 初始禁用
 
-    ttk.Label(root, text='请选择赛季版本：').grid(row=1, column=0)
+    ttk.Label(root, text="请选择赛季版本：").grid(row=2, column=0)
     version_display_map = {k: f"{k} {v[4]+v[9]}" for k, v in version_map.items()}
     version_names = list(version_display_map.values())
     version_var = tk.StringVar()
     entry1 = ttk.Combobox(root, textvariable=version_var, values=version_names, state="readonly", width=35)
-    entry1.grid(row=1, column=1)
+    entry1.grid(row=2, column=1)
     entry1.set(version_display_map["Y3S1"])  # 设置默认名称
     start_button = ttk.Button(root, text='开始下载')
-    start_button.grid(row=1, column=2)
+    start_button.grid(row=2, column=2)
     start_button.config(state="disabled")  # 初始禁用
 
     ttk.Button(root, text="清空日志", command=clear_log).grid(row=5, column=0, pady=5)
@@ -275,190 +507,11 @@ if __name__ == "__main__":
     check_dotnet_runtime()  # 启动时检测并决定是否启用按钮
     show_help()
 
+    progress_label = ttk.Label(root, text="进度：0% | 已用时间：--:-- ")
+    progress_label.grid(row=5, columnspan=3)
     progress_var = tk.DoubleVar()
     progressbar = ttk.Progressbar(root, variable=progress_var, orient="horizontal", length=500, mode="determinate")
     progressbar.grid(row=6, columnspan=3, pady=(0, 10))
-    progress_label = ttk.Label(root, text="进度：0% | 已用时间：--:--")
-    progress_label.grid(row=5, columnspan=3)
-
+    speed_label = ttk.Label(root)
+    speed_label.grid(row=7, columnspan=3)
     root.mainloop()
-
-def AddPatch(_version, _gamePath):
-    try:
-        print("如上述出现 Trying again (#10) 字样请开启Steam社区加速器重试！（302或UU路由模式）")
-        name = input("\n下载验证完毕，为避免存档冲突及联机使用，请输入你的英文游戏昵称（不要直接回车！）：")
-        name += '-'+_version
-        patchFileCount = 0
-        patchFolderCount = 0
-        patchFilePath = "lib\\" + manifestList[_version][5]
-        patchFileList = os.listdir(patchFilePath)
-        for file in patchFileList:
-            srcPath = os.path.join(patchFilePath, file)
-            dstPath = os.path.join(_gamePath, file)
-            if os.path.isdir(srcPath):
-                if os.path.exists(dstPath):
-                    shutil.rmtree(dstPath)#提前删除已存在的补丁文件夹
-                shutil.copytree(srcPath, dstPath)
-                patchFolderCount += 1
-            else:
-                shutil.copy(srcPath, dstPath)
-                patchFileCount += 1
-                if file.endswith('.ini') and file != "steam_emu.ini":
-                    if os.path.exists(dstPath):
-                        with open(dstPath, 'rt') as f:
-                            content = f.read()
-                            modified_content = re.sub('CHANGEGAMENAME', name, content)
-                            modified_content = re.sub('CHANGEUSERNAME', name, modified_content)
-                            f.close()
-                        with open(dstPath, 'wt') as f:
-                            f.write(modified_content)
-                            f.close()
-                if file.endswith('HeliosLoader.json'):#Y5S3 Heated Metal
-                    if os.path.exists(dstPath):
-                        with open(dstPath, 'rt') as f:
-                            content = f.read()
-                            modified_content = re.sub('CHANGEUSERNAME', name, content)
-                            f.close()
-                        with open(dstPath, 'wt') as f:
-                            f.write(modified_content)
-                            f.close()
-                            
-        if patchFolderCount != manifestList[_version][3]:
-            print("\n破解补丁文件夹数量不一致！请关闭杀毒软件，重新解压下载器安装包！")
-        elif patchFileCount != manifestList[_version][2]:
-            print("\n破解补丁文件数量不一致！请关闭杀毒软件，重新解压下载器安装包！")
-        elif patchFileCount > 0:
-            print("\n破解补丁已安装成功！补丁文件数量："+str(patchFileCount)+" 文件夹数量："+str(patchFolderCount))
-            
-        startGamePath = os.path.join(_gamePath, manifestList[_version][6])
-        if manifestList[_version][6] == "RainbowSixGame.exe":
-            if os.path.exists(startGamePath):
-                startGame = input("\n启动游戏的 exe 文件已准备好，是否启动游戏？(y/n)：")
-                startGame = startGame.lower()
-                if startGame == "y":
-                    RunGame(startGamePath, _gamePath)
-                print("\n即将返回主菜单！如自动启动卡BettleEye安装，请尝试手动启动游戏。")
-                print("游戏启动路径为: "+startGamePath)
-            else:
-                startGamePath = os.path.join(_gamePath, "Rainbowsix.exe")
-                if os.path.exists(startGamePath):
-                    startGame = input("\n启动游戏的 exe 文件已准备好，是否启动游戏？(y/n)：")
-                    startGame = startGame.lower()
-                    if startGame == "y":
-                        RunGame(startGamePath, _gamePath)
-                    print("\n即将返回主菜单！如自动启动卡BettleEye安装，请尝试手动启动游戏。")
-                    print("游戏启动路径为: "+startGamePath)
-                else:
-                    print("\n没有找到启动游戏的 RainbowSix.exe 文件！请验证游戏文件完整性！")
-        else:
-            if os.path.exists(startGamePath):
-                startGame = input("\n启动游戏的 bat 文件已准备好，是否启动游戏？(y/n)：")
-                startGame = startGame.lower()
-                if startGame == "y":
-                    RunGame(startGamePath, _gamePath)
-                print("\n即将返回主菜单！如自动启动卡BettleEye安装，请尝试手动启动游戏。")
-                print("游戏启动路径为: "+startGamePath)
-            else:
-                print("\n没有找到启动游戏的 RainbowSix.bat 文件！请重新下载以验证游戏完整性！")
-    except Exception as e:
-        print("\n先检查安装路径是否有空格，删除空格后开启Steam社区加速器重试！")
-        print(e)
-
-def Main():
-    gongNeng = input("\n请输入功能编号：")
-    if gongNeng == "1":
-        _version = DownloadPre()
-        print("\n提示：如需验证完整性请选择 "+_version+" 所在的文件夹上一层，即可验证补全 "+_version+"赛季 缺失的文件！")
-        _path = ChoosePath(_version)
-        _gamePath = os.path.join(_path, _version)
-        if _gamePath.count(_version) > 1:
-            print("\n你选择的文件夹为："+_gamePath)
-            print("此路径下已有 "+str(_gamePath.count(_version)-1)+" 个 "+_version+" 文件夹，请重新选择首个 "+_version+" 文件夹的上一层来验证完整性！")
-        else:
-            _first = IsFirstDownload(_path, _version, _gamePath)
-            if not os.path.exists("lib\\net9.txt"):#判断是否第一次运行
-                os.system("lib\\dotnet-runtime-9.0.3-win-x64.exe -q")
-                print("dotnet-9.0运行库安装成功！")
-                # 将文件名和路径作为参数传递给open()函数
-                file = open("lib\\net9.txt", "w")
-                file.write("dotnet-9.0 has installed.")
-                file.close()
-                #运行后需要创建一个net9.txt文件
-            mFile_1 = "lib\\depotcache\\377237_"+manifestList[_version][7]+".manifest"
-            mFile_2 = "lib\\depotcache\\359551_"+manifestList[_version][8]+".manifest"
-            if not os.path.exists(mFile_1):
-                print("\n该版本需登录购买了《彩虹六号-围攻》的Steam账号才能下载或验证！")
-                steamUser = input("\n请输入你的Steam账号：")
-                print("\n 如第一次使用请按提示输入你的Steam密码：")
-                if _first:
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -username "+steamUser+" -remember-password -dir "+_gamePath)
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -username "+steamUser+" -remember-password -dir "+_gamePath)
-                else:
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -username "+steamUser+" -remember-password -validate -dir "+_gamePath)
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -username "+steamUser+" -remember-password -validate -dir "+_gamePath)
-                    print("游戏文件完整性验证完毕！")
-            else:
-                if _first:
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_1+" -dir "+_gamePath)
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_2+" -dir "+_gamePath)
-                else:
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest "+manifestList[_version][7]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_1+" -validate -dir "+_gamePath)
-                    os.system("lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest "+manifestList[_version][8]+" -depotkeys lib\\steam.keys -manifestfile "+mFile_2+" -validate -dir "+_gamePath)
-                    print("游戏文件完整性验证完毕！")
-            
-            DownloadPatch(_version, _gamePath)
-    elif gongNeng == "2":
-        print("\n此模式仅支持中国大陆以外地区用户使用！\n国内想用请挂梯子或者UU路由模式！\n用302加速不行！")
-        _version = DownloadPre()
-        _path = ChoosePath(_version)
-        _gamePath = os.path.join(_path, _version)
-        #_txt = "\n下载前请用UU加速Steam商店，节点选路由模式！"
-        if _gamePath.count(_version) > 1:
-            print("\n你选择的文件夹为："+_gamePath)
-            print("此路径下已有 "+str(_gamePath.count(_version)-1)+" 个 "+_version+" 文件夹，请重新选择首个 "+_version+" 文件夹的上一层！")
-        else:
-            _first = IsFirstDownload(_path, _version, _gamePath)
-            
-            keyFile = "depot_keys.json"#复制key到LOCAL APPDATA
-            path_ProgrmData = os.getenv("LOCALAPPDATA")
-            steamctlPath = path_ProgrmData+"\\steamctl\\steamctl\\"
-            if not os.path.exists(steamctlPath):
-                os.makedirs(steamctlPath)
-            shutil.copy(os.path.join("lib\\manifestFiles\\", keyFile), os.path.join(steamctlPath, keyFile))
-            time.sleep(1)
-            
-            pythonPath = "lib\\python-3.12.3-embed-amd64\\python.exe"
-            os.system(pythonPath+" -m steamctl depot download -f lib\\manifestFiles\\"+manifestList[_version][0]+" -o "+_gamePath+" --skip-licenses --skip-login --cell_id 4")
-            time.sleep(1)
-            os.system(pythonPath+" -m steamctl depot download -f lib\\manifestFiles\\"+manifestList[_version][1]+" -o "+_gamePath+" --skip-licenses --skip-login --cell_id 4")#1 2 5
-            #pythonPath = "lib\\python-3.12.3-embed-amd64\\python.exe"
-            #os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][0]+" -k 55e7ea1db9a23f549c35553adb88ac3f97c1fc5f649df1515f5fa1dde7f501a6")
-            #time.sleep(1)
-            #os.system(pythonPath+" lib\\depotdownloader.py -c -o "+_gamePath+" depot -m lib\\manifestFiles\\"+manifestList[_version][1]+" -k b13d0908374e12054e73230c57da5d674dfe45cffe6ba7e11b3f1a8b155938d0")
-            
-            DownloadPatch(_version, _gamePath)
-    elif gongNeng == "3":
-        y5 = input("\n你玩的版本是否是Y5？(y/n)：")
-        y5 = y5.lower()
-        if y5 == "y":
-            subprocess.run(['start', "lib\\Y5_xiu_gai_qi.exe"], shell=True)
-        else:
-            subprocess.run(['start', "lib\\R6_Liberator_0.0.0.22.exe"], shell=True)
-    elif gongNeng == "4":
-        installVpn = input("\n是否安装虚拟局域网软件OpenVPN用于联机？(y/n)：")
-        installVpn = installVpn.lower()
-        if installVpn == "y":
-            subprocess.run(['start', "lib\\openvpn-install-2.4.8-I602-Win10.exe"], shell=True)
-            print("安装中... ... \n安装完毕后到QQ群：439523286 中下载联机节点文件ChengDu-50120.ovpn导入既可连接群内联机服务器！")
-    elif gongNeng == "5":
-        y5y8 = input("\n你联机的版本是否是Y5-Y8？(y/n)：")
-        y5y8 = y5y8.lower()
-        hostIP = input("\n请输入房主的虚拟局域网IP：")
-        if y5y8 == "y":
-            os.system("lib\\NetworkedR6.exe "+hostIP+" -p 6200")
-        else:
-            os.system("lib\\NetworkedR6.exe "+hostIP)
-    elif gongNeng == "6":
-        os.system("route print -4")
-    else:
-        print('\n                ----请输入提示的功能编号！！！')
