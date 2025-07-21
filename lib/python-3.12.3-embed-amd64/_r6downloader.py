@@ -93,7 +93,7 @@ def save_log():
 def show_help():
     log_message("使用说明：请选择安装位置和赛季版本，然后点击开始下载。", "info")
     log_message("支持免登录下载Y6S1之前的赛季及Y8S2赛季，可验证完整性。", "info")
-    log_message("如出现 Trying again (#1)，请开启 Steam 社区加速器后重试。💡", "warn")
+    #log_message("如出现 Trying again (#1)，请开启 Steam 社区加速器后重试。💡", "info")
 
 def check_dotnet_runtime():
     runtime_flag = os.path.exists("lib/net9.txt")
@@ -116,9 +116,22 @@ def check_dotnet_runtime():
     return True
 
 start_time = time.time()  # 在下载开始时记录
-def update_progress_from_line(line):
+def update_progress_from_line(line, download):
+    if "Connection to Steam failed" in line:
+        log_message("连接Steam网络失败，请开启302加速器或UU加速器路由模式后重试。", "error")
+    if any(keyword in line for keyword in ["Encountered", "Error", "timeout"]):
+        log_message("⚠️ 检测到下载错误或网络异常，如下载完后不影响运行请忽略此消息。", "warn")
+        log_message(line.strip(), "error")
+    if "Validating" in line:
+        file_match = re.search(r'Validating\s+(.+)', line)
+        if file_match:
+            file_path = file_match.group(1).strip()
+            log_message(f"验证文件中：{file_path}", "info")
+
     match = re.search(r'(\d+(\.\d+)?)%', line)
     if match:
+        if download:
+            log_message(f"下载文件中：{line.strip()}", "info")
         raw_value = float(match.group(1))
         percent = round(raw_value, 2)
         progress_var.set(percent)
@@ -138,7 +151,7 @@ def AddPatchGUI(version, game_path):
     try:
         nickname = simpledialog.askstring("个性化昵称", "请输入你的英文游戏昵称（建议不要中文或空格）：")
         if not nickname:
-            log_message("⚠️ 未输入昵称，跳过补丁修改", "warn")
+            log_message("⚠️ 未输入昵称，使用默认名称Player", "warn")
             nickname = "Player"
 
         nickname += "-" + version
@@ -199,18 +212,17 @@ def AddPatchGUI(version, game_path):
             log_message("❌ 未找到启动文件，请验证游戏完整性", "error")
 
     except Exception as e:
-        log_message(f"❌ 补丁出错：{e}", "error")
+        log_message(f"❌ 补丁安装出错：{e}", "error")
 
-def run_command_live(cmd):
+def run_command_live(cmd, download):
     process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     for line in process.stdout:
-        log_message(line.strip(), "info")
-        update_progress_from_line(line)
+        update_progress_from_line(line, download)
     process.wait()
     if process.returncode != 0:
         log_message("❌ 命令执行失败", "error")
     else:
-        log_message("✅ 命令执行完成", "success")
+        #log_message("✅ 命令执行完成", "success")
         progress_var.set(100)  # 任务完成后设置为100%
 
 def run_download(dir, version):
@@ -235,12 +247,11 @@ def run_download(dir, version):
         cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}"'
         cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}"'
 
-        log_message("开始执行第一部分下载...", "warn")
-        run_command_live(cmd1)
+        log_message("开始下载第一部分游戏文件（1/2）...", "info")
+        run_command_live(cmd1, True)
 
-        log_message("开始执行第二部分下载...", "warn")
-        run_command_live(cmd2)
-        log_message(cmd2)
+        log_message("开始下载第二部分游戏文件（2/2）...", "info")
+        run_command_live(cmd2, True)
 
         log_message("🎉 下载任务全部完成！", "success")
         
@@ -270,11 +281,11 @@ def run_verify(dir, version):
         cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}"'
         cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}"'
 
-        log_message("开始执行第一部分验证...", "warn")
-        run_command_live(cmd1)
+        log_message("开始验证第一部分游戏文件（1/2）...", "info")
+        run_command_live(cmd1, False)
 
-        log_message("开始执行第二部分验证...", "warn")
-        run_command_live(cmd2)
+        log_message("开始验证第二部分游戏文件（2/2）...", "info")
+        run_command_live(cmd2, False)
 
         log_message("🎉 验证完整性全部完成！", "success")
         
@@ -448,6 +459,7 @@ if __name__ == "__main__":
     root.config(menu=menu_bar)
     online_menu = tk.Menu(menu_bar, tearoff=0)
     online_menu.add_command(label="安装联机VPN", command=lambda: subprocess.Popen("lib\\openvpn-install-2.4.8-I602-Win10.exe", shell=True))
+    online_menu.add_command(label="查看搜房记录", command=lambda: webbrowser.open_new("https://skin.ppkok.com/r6"))
     online_menu.add_command(label="启动联机转发", command=run_forwarding)
     online_menu.add_command(label="测试到房主延迟", command=ask_ping_ip)
     online_menu.add_command(label="查看当前路由", command=show_route_to_log)
@@ -468,7 +480,7 @@ if __name__ == "__main__":
     about_menu.add_command(label="访问R6聊天室", command=lambda: webbrowser.open_new("https://chat.002.hk/R6Tools-chat/"))
     about_menu.add_separator()
     about_menu.add_command(label="捐助开发", command=lambda: os.startfile("lib\\zanzhu.png"))
-    about_menu.add_command(label="程序版本：v2.0", command=lambda: messagebox.showinfo("版本信息", "当前版本：v2.0 \n获取最新信息请加入QQ群：439523286"))
+    about_menu.add_command(label="程序版本：v2.01", command=lambda: messagebox.showinfo("版本信息", "当前版本：v2.01 \n获取最新信息请加入QQ群：439523286"))
     menu_bar.add_cascade(label="关于", menu=about_menu)
 
     ttk.Label(root, text="请选择安装文件夹：").grid(row=1, column=0)
