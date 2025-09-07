@@ -7,32 +7,36 @@ import datetime
 import threading
 import webbrowser
 import subprocess
+import urllib.request
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import simpledialog
 
+log_lines = []  # 用于缓存所有处理过的 line
+start_time = time.time()  # 在下载开始时记录
+download_mode = True
 version_map = {
-    "Y1S0" : ["r6_y1s0_377237", "r6_y1s0_359551", 7, 0, "2015年初代 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "8358812283631269928", "3893422760579204530", "14.2 GB "],
-    "Y1S1" : ["r6_y1s1_377237", "r6_y1s1_359551", 7, 0, "墨冰行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5188997148801516344", "7932785808040895147", "16.7 GB "],
-    "Y1S2" : ["r6_y1s2_377237", "r6_y1s2_359551", 7, 0, "尘土战线 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "2303064029242396590", "2206497318678061176", "20.9 GB "],
-    "Y1S3" : ["r6_y1s3_377237", "r6_y1s3_359551", 7, 0, "骷髅雨行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5819137024728546741", "5851804596427790505", "25.1 GB "],
-    "Y1S4" : ["r6_y1s4_377237", "r6_y1s4_359551", 7, 0, "赤鸦行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "3576607363557872807", "8569920171217002292", "28.5 GB "],
-    "Y2S1" : ["r6_y2s1_377237", "r6_y2s1_359551", 7, 0, "丝绒壳行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "2248734317261478192", "8006071763917433748", "33.2 GB "],
-    "Y2S2" : ["r6_y2s2_377237", "r6_y2s2_359551", 7, 0, "健康行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5875987479498297665", "708773000306432190", "34 GB "],
-    "Y2S3" : ["r6_y2s3_377237", "r6_y2s3_359551", 7, 0, "血兰花行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6708129824495912434", "1613631671988840841", "34.3 GB "],
-    "Y2S4" : ["r6_y2s4_377237", "r6_y2s4_359551", 7, 0, "白噪声行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8748734086032257441", "4221297486420648079", "48.7 GB "],
-    "Y3S1" : ["r6_y3s1_377237", "r6_y3s1_359551", 7, 0, "奇美拉行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5071357104726974256", "4701787239566783972", "58.8 GB "],
-    "Y3S2" : ["r6_y3s2_377237", "r6_y3s2_359551", 7, 0, "备战行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6507886921175556869", "8765715607275074515", "63.3 GB "],
-    "Y3S3" : ["r6_y3s3_377237", "r6_y3s3_359551", 7, 0, "暗空行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5562094852451837435", "7781202564071310413", "72.6 GB "],
-    "Y3S4" : ["r6_y3s4_377237", "r6_y3s4_359551", 7, 0, "风城行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6502258854032233436", "7659555540733025386", "76.9 GB "],
-    "Y4S1" : ["r6_y4s1_377237", "r6_y4s1_359551", 7, 0, "燃烧地平线 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8356277316976403078", "5935578581006804383", "59.7 GB "],
-    "Y4S2" : ["r6_y4s2_377237", "r6_y4s2_359551", 7, 0, "幻镜行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "693082837425613508", "5408324128694463720", "67.1 GB "],
-    "Y4S3" : ["r6_y4s3_377237", "r6_y4s3_359551", 7, 0, "余烬重燃行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "3546781236735558235", "7869081741739849703", "69.6 GB "],
-    "Y4S4" : ["r6_y4s4_377237", "r6_y4s4_359551", 7, 0, "幻变潮汐行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "299124516841461614", "1842268638395240106", "75.2 GB "],
-    "Y5S1" : ["r6_y5s1_377237", "r6_y5s1_359551", 7, 0, "虚空边境行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4736360397583523381", "6296533808765702678", "74.3 GB "],
-    "Y5S2" : ["r6_y5s2_377237", "r6_y5s2_359551", 7, 0, "钢流行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4367817844736324940", "893971391196952070", "81.3 GB "],
+    "Y1S0" : ["r6_y1s0_377237", "r6_y1s0_359551", 7, 0, "2015年初代 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "8358812283631269928", "3893422760579204530", "完整版大小 14.2 GB "],
+    "Y1S1" : ["r6_y1s1_377237", "r6_y1s1_359551", 7, 0, "墨冰行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5188997148801516344", "7932785808040895147", "完整版大小 16.7 GB "],
+    "Y1S2" : ["r6_y1s2_377237", "r6_y1s2_359551", 7, 0, "尘土战线 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "2303064029242396590", "2206497318678061176", "完整版大小 20.9 GB "],
+    "Y1S3" : ["r6_y1s3_377237", "r6_y1s3_359551", 7, 0, "骷髅雨行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5819137024728546741", "5851804596427790505", "完整版大小 25.1 GB "],
+    "Y1S4" : ["r6_y1s4_377237", "r6_y1s4_359551", 7, 0, "赤鸦行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "3576607363557872807", "8569920171217002292", "完整版大小 28.5 GB "],
+    "Y2S1" : ["r6_y2s1_377237", "r6_y2s1_359551", 7, 0, "丝绒壳行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "2248734317261478192", "8006071763917433748", "完整版大小 33.2 GB "],
+    "Y2S2" : ["r6_y2s2_377237", "r6_y2s2_359551", 7, 0, "健康行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5875987479498297665", "708773000306432190", "完整版大小 34 GB "],
+    "Y2S3" : ["r6_y2s3_377237", "r6_y2s3_359551", 7, 0, "血兰花行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6708129824495912434", "1613631671988840841", "完整版大小 34.3 GB "],
+    "Y2S4" : ["r6_y2s4_377237", "r6_y2s4_359551", 7, 0, "白噪声行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8748734086032257441", "4221297486420648079", "完整版大小 48.7 GB "],
+    "Y3S1" : ["r6_y3s1_377237", "r6_y3s1_359551", 7, 0, "奇美拉行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5071357104726974256", "4701787239566783972", "完整版大小 58.8 GB "],
+    "Y3S2" : ["r6_y3s2_377237", "r6_y3s2_359551", 7, 0, "备战行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6507886921175556869", "8765715607275074515", "完整版大小 63.3 GB "],
+    "Y3S3" : ["r6_y3s3_377237", "r6_y3s3_359551", 7, 0, "暗空行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5562094852451837435", "7781202564071310413", "完整版大小 72.6 GB "],
+    "Y3S4" : ["r6_y3s4_377237", "r6_y3s4_359551", 7, 0, "风城行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6502258854032233436", "7659555540733025386", "完整版大小 76.9 GB "],
+    "Y4S1" : ["r6_y4s1_377237", "r6_y4s1_359551", 7, 0, "燃烧地平线 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8356277316976403078", "5935578581006804383", "完整版大小 59.7 GB "],
+    "Y4S2" : ["r6_y4s2_377237", "r6_y4s2_359551", 7, 0, "幻镜行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "693082837425613508", "5408324128694463720", "完整版大小 67.1 GB "],
+    "Y4S3" : ["r6_y4s3_377237", "r6_y4s3_359551", 7, 0, "余烬重燃行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "3546781236735558235", "7869081741739849703", "完整版大小 69.6 GB "],
+    "Y4S4" : ["r6_y4s4_377237", "r6_y4s4_359551", 7, 0, "幻变潮汐行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "299124516841461614", "1842268638395240106", "完整版大小 75.2 GB "],
+    "Y5S1" : ["r6_y5s1_377237", "r6_y5s1_359551", 7, 0, "虚空边境行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4736360397583523381", "6296533808765702678", "完整版大小 74.3 GB "],
+    "Y5S2" : ["r6_y5s2_377237", "r6_y5s2_359551", 7, 0, "钢流行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4367817844736324940", "893971391196952070", "完整版大小 81.3 GB "],
     "Y5S3" : ["r6_y5s3_377237", "r6_y5s3_359551", 9, 1, "暗影传承行动 ", "Plazas\\Y5S3", "RainbowSix.bat", "85893637567200342", "3089981610366186823", "支持全皮肤和地图编辑器 "],
     "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", 9, 1, "霓虹黎明行动 ", "Plazas\\Y5S4", "RainbowSix.bat", "3390446325154338855", "6947060999143280245", "支持全皮肤和地图编辑器 "],
     "Y6S1" : ["r6_y6s1_377237", "r6_y6s1_359551", 12, 0, "深红劫案行动 ", "Plazas\\CPlay", "RainbowSix.bat", "7890853311380514304", "7485515457663576274", " "],
@@ -87,8 +91,11 @@ def save_log():
     file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("文本文件", "*.txt")])
     if file_path:
         with open(file_path, "w", encoding="utf-8") as f:
+            for line in log_lines:
+                f.write(line + "\n")
+            f.write("\n\n\n----------------程序窗口内输出内容-----------\n")
             f.write(log_content)
-        log_message(f"日志已保存到：{file_path}", "success")
+        log_message(f"详细下载日志已保存到：{file_path}", "success")
 
 def show_help():
     log_message("使用说明：请选择安装位置和赛季版本，然后点击开始下载。", "info")
@@ -97,45 +104,51 @@ def show_help():
 
 def check_dotnet_runtime():
     runtime_flag = os.path.exists("lib/net9.txt")
+    installer_path = os.path.join("lib", "dotnet-runtime-9.0.3-win-x64.exe")
+    download_url = "https://builds.dotnet.microsoft.com/dotnet/Runtime/9.0.3/dotnet-runtime-9.0.3-win-x64.exe"
+    
     if not runtime_flag:
+        if not os.path.exists(installer_path):
+            log_message("未找到本地 .NET 9.0 安装包，正在从微软官网下载...", "warn")
+            try:
+                urllib.request.urlretrieve(download_url, installer_path)
+                log_message("✔️ 运行库下载完成。", "success")
+            except Exception as e:
+                log_message(f"❌ 运行库下载失败：{e}", "error")
+                return False
+                
         log_message("正在安装 .NET 9.0 运行库...", "warn")
         try:
-            # 启动安装包
-            subprocess.run('lib\\dotnet-runtime-9.0.3-win-x64.exe', shell=True)
+            # 静默安装 .NET 9.0 运行库
+            subprocess.run(f'"{installer_path}" /quiet /norestart', shell=True)
             log_message("✔️ 安装完成。请继续选择安装路径。", "success")
             # 创建标记文件
-            with open("lib/net9.txt", "w") as f:
+            with open("lib/net9.txt", "w", encoding="utf-8") as f:
                 f.write("dotnet 9.0 installed")
         except Exception as e:
             log_message(f"❌ 安装失败：{e}", "error")
             return False
     else:
         log_message("✔️ 已检测到 .NET 9.0 运行库。", "success")
-    # 启用路径选择按钮
+        # 启用路径选择按钮
     select_dir_button.config(state="normal")
     return True
 
-start_time = time.time()  # 在下载开始时记录
 def update_progress_from_line(line, download):
-    if "Connection to Steam failed" in line:
-        log_message("连接Steam网络失败，请开启302加速器或UU加速器路由模式后重试。", "error")
-    if any(keyword in line for keyword in ["Encountered", "Error", "timeout"]):
-        log_message("⚠️ 检测到下载错误或网络异常，如下载完后不影响运行请忽略此消息。", "warn")
-        log_message(line.strip(), "error")
-    if "Validating" in line:
-        file_match = re.search(r'Validating\s+(.+)', line)
-        if file_match:
-            file_path = file_match.group(1).strip()
-            log_message(f"验证文件中：{file_path}", "info")
-
+    if not line:
+        return
+        
+    log_lines.append(line.strip())  # 缓存原始行
+            
     match = re.search(r'(\d+(\.\d+)?)%', line)
     if match:
         if download:
             log_message(f"下载文件中：{line.strip()}", "info")
+        
         raw_value = float(match.group(1))
         percent = round(raw_value, 2)
         progress_var.set(percent)
-
+        
         # 只显示已用时间
         elapsed = time.time() - start_time
         mins = int(elapsed // 60)
@@ -144,6 +157,28 @@ def update_progress_from_line(line, download):
 
         progress_label.config(text=f"进度：{percent:.2f}% | 已用时间：{time_str}")
         root.update_idletasks()
+    else:
+        if "Validating" in line:
+            file_match = re.search(r'Validating\s+(.+)', line)
+            if file_match:
+                file_path = file_match.group(1).strip()
+                log_message(f"验证文件中：{file_path}", "info")
+        if "磁盘空间不足" in line:
+            log_message(line.strip(), "error")
+        if "You must install or update .NET to run this application" in line:
+            log_message("没有检测到 .NET 9.0 运行库，请手动安装lib文件夹下dotnet-runtime-9.0.3-win-x64.exe后重试。", "error")
+        if "Connection to Steam failed" in line:
+            log_message("连接Steam网络失败，请开启Steam++、302加速器或UU加速器路由模式后重试。", "error")
+        if any(keyword in line for keyword in ["Encountered", "Error", "timeout"]):
+            log_message("⚠️ 检测到下载错误或网络异常，如下载完后不影响运行请忽略此消息。", "warn")
+            log_message(line.strip(), "warn")
+
+def RunGame(filePath, cwdPath):
+    try:
+        subprocess.run(['start', filePath], shell=True, cwd=cwdPath)
+        os.startfile("lib\\zanzhu.png")
+    except Exception as e:
+        print(e)
 
 def AddPatchGUI(version, game_path):
     start_button.config(state="normal")
@@ -195,7 +230,12 @@ def AddPatchGUI(version, game_path):
         elif folder_count != expected_folder_count:
             log_message("❌ 补丁文件夹数量异常，请关闭杀毒软件并重新解压下载器", "error")
         else:
-            log_message(f"✅ 补丁安装成功：{file_count}个文件，{folder_count}个文件夹", "success")
+            log_message(f"补丁安装成功：{file_count}个文件，{folder_count}个文件夹", "success")
+            
+        if download_slim_var.get():
+            slim_patch_dst = os.path.join(game_path, "streaminginstall.ini")
+            shutil.copy("lib\\Plazas\\streaminginstall.ini", slim_patch_dst)
+            log_message(f"精简版补丁安装成功！", "success")
 
         # 提示是否启动游戏
         exe_name = version_map[version][6]
@@ -205,7 +245,7 @@ def AddPatchGUI(version, game_path):
         if os.path.exists(exe_path):
             if messagebox.askyesno("启动游戏", "补丁已安装完毕，是否启动游戏？"):
                 log_message("🎮 正在启动游戏...", "info")
-                os.startfile(exe_path)
+                RunGame(exe_path, game_path)
             else:
                 log_message("🎮 用户选择稍后启动游戏", "info")
         else:
@@ -227,6 +267,7 @@ def run_command_live(cmd, download):
 
 def run_download(dir, version):
     global start_time
+    global download_mode
     start_time = time.time()
     
     install_path = dir
@@ -244,14 +285,18 @@ def run_download(dir, version):
         start_button.config(text="下载中...")
         start_button.config(state="disabled")
         select_dir_button.config(state="disabled")
-        cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}"'
-        cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}"'
-
+        if download_slim_var.get():
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}" -filelist lib\\min.txt'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}" -filelist lib\\min.txt'
+        else:
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}"'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}"'
+        
         log_message("开始下载第一部分游戏文件（1/2）...", "info")
-        run_command_live(cmd1, True)
+        run_command_live(cmd1, download_mode)
 
         log_message("开始下载第二部分游戏文件（2/2）...", "info")
-        run_command_live(cmd2, True)
+        run_command_live(cmd2, download_mode)
 
         log_message("🎉 下载任务全部完成！", "success")
         
@@ -261,6 +306,7 @@ def run_download(dir, version):
 
 def run_verify(dir, version):
     global start_time
+    global download_mode
     start_time = time.time()
 
     install_path = dir
@@ -278,14 +324,18 @@ def run_verify(dir, version):
         start_button.config(text="验证中...")
         start_button.config(state="disabled")
         select_dir_button.config(state="disabled")
-        cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}"'
-        cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}"'
+        if download_slim_var.get():
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}" -filelist lib\\min.txt'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}" -filelist lib\\min.txt'
+        else:
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}"'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}"'
 
         log_message("开始验证第一部分游戏文件（1/2）...", "info")
-        run_command_live(cmd1, False)
+        run_command_live(cmd1, download_mode)
 
         log_message("开始验证第二部分游戏文件（2/2）...", "info")
-        run_command_live(cmd2, False)
+        run_command_live(cmd2, download_mode)
 
         log_message("🎉 验证完整性全部完成！", "success")
         
@@ -311,8 +361,11 @@ def has_existing_game_files(folder):
 
 def select_dir(entry):
     dir = filedialog.askdirectory()
+    if not dir:  # 用户取消选择
+        return  # 直接退出函数，不做任何操作
     entry.delete(0, tk.END)
     entry.insert(0, dir)
+    global download_mode
 
     # 路径格式检查
     if re.search(r'[\u4e00-\u9fff]', dir) or ' ' in dir:
@@ -325,13 +378,22 @@ def select_dir(entry):
     # 检查文件夹是否为空
     if not os.listdir(dir):
         log_message(f"安装路径验证成功：准备下载到 {dir}", "success")
-        start_button.config(text="开始下载")
+        
+        download_mode = True
+        if download_slim_var.get():
+            start_button.config(text="下载精简版")
+        else:
+            start_button.config(text="下载完整版")
         start_button.config(command=lambda: download_game(dir, entry1.get().split()[0]))
         start_button.config(state="normal")
     else:
         if has_existing_game_files(dir):
             log_message("检测到游戏文件：进入验证模式🔍", "info")
-            start_button.config(text="验证完整性")
+            download_mode = False
+            if download_slim_var.get():
+                start_button.config(text="验证精简版")
+            else:
+                start_button.config(text="验证完整版")
             start_button.config(command=lambda: verify_files(dir, entry1.get().split()[0]))
             start_button.config(state="normal")
         else:
@@ -459,7 +521,7 @@ if __name__ == "__main__":
     root.config(menu=menu_bar)
     online_menu = tk.Menu(menu_bar, tearoff=0)
     online_menu.add_command(label="安装联机VPN", command=lambda: subprocess.Popen("lib\\openvpn-install-2.4.8-I602-Win10.exe", shell=True))
-    online_menu.add_command(label="查看搜房记录", command=lambda: webbrowser.open_new("https://skin.ppkok.com/r6"))
+    online_menu.add_command(label="查看搜房记录", command=lambda: webbrowser.open_new("http://1.14.70.62/r6"))
     online_menu.add_command(label="启动联机转发", command=run_forwarding)
     online_menu.add_command(label="测试到房主延迟", command=ask_ping_ip)
     online_menu.add_command(label="查看当前路由", command=show_route_to_log)
@@ -480,7 +542,7 @@ if __name__ == "__main__":
     about_menu.add_command(label="访问R6聊天室", command=lambda: webbrowser.open_new("https://chat.002.hk/R6Tools-chat/"))
     about_menu.add_separator()
     about_menu.add_command(label="捐助开发", command=lambda: os.startfile("lib\\zanzhu.png"))
-    about_menu.add_command(label="程序版本：v2.01", command=lambda: messagebox.showinfo("版本信息", "当前版本：v2.01 \n获取最新信息请加入QQ群：439523286"))
+    about_menu.add_command(label="程序版本：v2.1", command=lambda: messagebox.showinfo("版本信息", "当前版本：v2.1 \n获取最新信息请加入QQ群：439523286"))
     menu_bar.add_cascade(label="关于", menu=about_menu)
 
     ttk.Label(root, text="请选择安装文件夹：").grid(row=1, column=0)
@@ -502,11 +564,29 @@ if __name__ == "__main__":
     start_button = ttk.Button(root, text='开始下载')
     start_button.grid(row=2, column=2)
     start_button.config(state="disabled")  # 初始禁用
+    
+    download_slim_var = tk.BooleanVar(value=True)  # 默认勾选
+    
+    def toggle_download_text():
+        if download_slim_var.get():
+            if download_mode:
+                start_button.config(text="下载精简版")
+            else:
+                start_button.config(text="验证精简版")
+        else:
+            if download_mode:
+                start_button.config(text="下载完整版")
+            else:
+                start_button.config(text="验证完整版")
+
+    slim_check = ttk.Checkbutton(root, text="是否选择精简版，勾选后比完整版少下载70%，但画质较低", variable=download_slim_var, command=toggle_download_text)
+    slim_check.grid(row=3, column=1, sticky="w", pady=5)
+    
+    
 
     ttk.Button(root, text="清空日志", command=clear_log).grid(row=5, column=0, pady=5)
     ttk.Button(root, text="保存日志", command=save_log).grid(row=5, column=2, pady=5)
 
-    global text
     text = tk.Text(root, width=80, height=20)
     text.grid(row=4,columnspan=3)
     # 设置颜色标签
@@ -516,7 +596,8 @@ if __name__ == "__main__":
     text.tag_config("warn", foreground="orange")
     text.grid(row=4, columnspan=3, sticky="nsew")
     
-    check_dotnet_runtime()  # 启动时检测并决定是否启用按钮
+    
+    threading.Thread(target=check_dotnet_runtime, daemon=True).start()  # 启动时后台检测.net
     show_help()
 
     progress_label = ttk.Label(root, text="进度：0% | 已用时间：--:-- ")
