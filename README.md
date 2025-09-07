@@ -1,8 +1,10 @@
-### 彩虹六号旧版本下载器2.0界面：
-![image](https://github.com/fuzzyscn/Old-R6s-Steam-Download-Command/blob/main/gui.png?raw=true)
+### 彩虹六号旧版本下载器2.1界面：
+![image](https://github.com/fuzzyscn/Old-R6s-Steam-Download-Command/blob/main/gui21.png?raw=true)
+
+下载地址 [[https://www.123pan.com/s/v3YyVv-ncDSv](https://www.123912.com/s/v3YyVv-4K3lv)
+
 
 # 使用steam控制台下载方式
-所有旧版彩虹六号steam下载器（新方法）：[https://www.123pan.com/s/v3YyVv-ncDSv.html](https://www.123912.com/s/v3YyVv-sT3lv)
 - Win+R 运行框输入冒号后命令启动steam控制台：steam://open/console
 - 控制台运行download_depot开头的命令即可下载以下旧版本彩虹六号，速度非常快！
 - 下载前需确认空间足够，下载文件的位置在Steam安装目录下\steamapps\content\app_359550\377237和359551里面，
