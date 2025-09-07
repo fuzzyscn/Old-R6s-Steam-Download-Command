@@ -1,0 +1,1 @@
+regex:^(?!.*(textures1\.forge|textures2\.forge|textures3\.forge)$).*
