@@ -53,6 +53,7 @@ version_map = {
     "Y8S4" : ["r6_y8s4_377237", "r6_y8s4_359551", 9, 1, "极度深寒行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7646647065987620875", "4957295777170965935", "未测试 不推荐下载"],
     "Y9S1" : ["r6_y9s1_377237", "r6_y9s1_359551", 9, 1, "绝命征兆行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "1959067516419454682", "1140469899661941149", "未测试 不推荐下载"],
     "Y9S4" : ["r6_y9s4_377237", "r6_y9s4_359551", 9, 1, "碰撞行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7684058120163063592", "2666276619654974788", "未测试 不推荐下载"],
+    "Y10S2" : ["r6_y10s2_377237", "r6_y10s2_359551", 9, 1, "围攻X 破晓行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "104322460841049394", "2774763980088642828", "未测试 不推荐下载"],
 }
 
 def get_real_time_net_speed(interval=1):
@@ -169,6 +170,8 @@ def update_progress_from_line(line, download):
             log_message("没有检测到 .NET 9.0 运行库，请手动安装lib文件夹下dotnet-runtime-9.0.3-win-x64.exe后重试。", "error")
         if "Connection to Steam failed" in line:
             log_message("连接Steam网络失败，请开启Steam++、302加速器或UU加速器路由模式后重试。", "error")
+        if "Lost connection to Steam" in line:
+            log_message("Steam网络连接中断，请开启Steam++、302加速器或UU加速器路由模式后重试。", "error")
         if any(keyword in line for keyword in ["Encountered", "Error", "timeout"]):
             log_message("⚠️ 检测到下载错误或网络异常，如下载完后不影响运行请忽略此消息。", "warn")
             log_message(line.strip(), "warn")
@@ -178,7 +181,7 @@ def RunGame(filePath, cwdPath):
         subprocess.run(['start', filePath], shell=True, cwd=cwdPath)
         os.startfile("lib\\zanzhu.png")
     except Exception as e:
-        print(e)
+        log_message(e)
 
 def AddPatchGUI(version, game_path):
     start_button.config(state="normal")
@@ -278,31 +281,53 @@ def run_download(dir, version):
 
     mFile_1 = f"lib\\depotcache\\377237_{manifest1}.manifest"
     mFile_2 = f"lib\\depotcache\\359551_{manifest2}.manifest"
-    # 🔍 如果 manifest 文件不存在，提示 Steam 登录
+    # 🔍 如果 manifest 文件不存在，Steam 登录
+    start_button.config(text="下载中...")
+    start_button.config(state="disabled")
+    select_dir_button.config(state="disabled")
+    
+    steamUser = "steam"
+    passwd = "123456"
     if not os.path.exists(mFile_1):
-        log_message("⚠️ 该版本需要登录购买了《彩虹六号：围攻》的 Steam 账号才能下载或验证！\n请使用下载器1.8命令行版本下载或验证。", "error")
-    else:
-        start_button.config(text="下载中...")
-        start_button.config(state="disabled")
-        select_dir_button.config(state="disabled")
-        if download_slim_var.get():
+        file_path = 'y6y7y8-steam-user-password.txt'
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                steamUser = f.readline().strip()  # 第一行是账号
+                passwd = f.readline().strip()     # 第二行是密码
+
+            log_message(f"读取到Steam账号: {steamUser}")
+            log_message(f"读取到Steam密码: {passwd}")
+        except FileNotFoundError:
+            log_message(f"文件未找到: {file_path}")
+        except Exception as e:
+            log_message(f"读取文件时发生错误: {e}")
+            
+    if download_slim_var.get():
+        if not os.path.exists(mFile_1):
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -username {steamUser} -password {passwd} -dir "{install_path}" -filelist lib\\min.txt'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -username {steamUser} -password {passwd} -dir "{install_path}" -filelist lib\\min.txt'
+        else:
             cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}" -filelist lib\\min.txt'
             cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}" -filelist lib\\min.txt'
+    else:
+        if not os.path.exists(mFile_1):
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -username {steamUser} -password {passwd} -dir "{install_path}"'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -username {steamUser} -password {passwd} -dir "{install_path}"'
         else:
             cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -dir "{install_path}"'
             cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -dir "{install_path}"'
-        
-        log_message("开始下载第一部分游戏文件（1/2）...", "info")
-        run_command_live(cmd1, download_mode)
+    
+    log_message("开始下载第一部分游戏文件（1/2）...", "info")
+    run_command_live(cmd1, download_mode)
 
-        log_message("开始下载第二部分游戏文件（2/2）...", "info")
-        run_command_live(cmd2, download_mode)
+    log_message("开始下载第二部分游戏文件（2/2）...", "info")
+    run_command_live(cmd2, download_mode)
 
-        log_message("🎉 下载任务全部完成！", "success")
-        
-        # 补丁由主线程调用
-        root.after(100, lambda: AddPatchGUI(version, install_path))
-        start_button.config(text="开始下载")
+    log_message("🎉 下载任务全部完成！", "success")
+    
+    # 补丁由主线程调用
+    root.after(100, lambda: AddPatchGUI(version, install_path))
+    start_button.config(text="开始下载")
 
 def run_verify(dir, version):
     global start_time
@@ -317,32 +342,54 @@ def run_verify(dir, version):
 
     mFile_1 = f"lib\\depotcache\\377237_{manifest1}.manifest"
     mFile_2 = f"lib\\depotcache\\359551_{manifest2}.manifest"
-    # 🔍 如果 manifest 文件不存在，提示 Steam 登录
+    # 🔍 如果 manifest 文件不存在，登录Steam
+    start_button.config(text="验证中...")
+    start_button.config(state="disabled")
+    select_dir_button.config(state="disabled")
+    
+    steamUser = "steam"
+    passwd = "123456"
     if not os.path.exists(mFile_1):
-        log_message("⚠️ 该版本需要登录购买了《彩虹六号：围攻》的 Steam 账号才能下载或验证！\n请使用下载器1.8命令行版本下载或验证。", "error")
-    else:
-        start_button.config(text="验证中...")
-        start_button.config(state="disabled")
-        select_dir_button.config(state="disabled")
-        if download_slim_var.get():
+        file_path = 'y6y7y8-steam-user-password.txt'
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                steamUser = f.readline().strip()  # 第一行是账号
+                passwd = f.readline().strip()     # 第二行是密码
+
+            log_message(f"读取到Steam账号: {steamUser}")
+            log_message(f"读取到Steam密码: {passwd}")
+        except FileNotFoundError:
+            log_message(f"文件未找到: {file_path}")
+        except Exception as e:
+            log_message(f"读取文件时发生错误: {e}")
+            
+    if download_slim_var.get():
+        if not os.path.exists(mFile_1):
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -username {steamUser} -password {passwd} -validate -dir "{install_path}" -filelist lib\\min.txt'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -username {steamUser} -password {passwd} -validate -dir "{install_path}" -filelist lib\\min.txt'
+        else:
             cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}" -filelist lib\\min.txt'
             cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}" -filelist lib\\min.txt'
+    else:
+        if not os.path.exists(mFile_1):
+            cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -username {steamUser} -password {passwd} -validate -dir "{install_path}"'
+            cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -username {steamUser} -password {passwd} -validate -dir "{install_path}"'
         else:
             cmd1 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 377237 -manifest {manifest1} -depotkeys lib\\steam.keys -manifestfile {mFile_1} -validate -dir "{install_path}"'
             cmd2 = f'lib\\net9.0\\DepotDownloaderMod.exe -app 359550 -depot 359551 -manifest {manifest2} -depotkeys lib\\steam.keys -manifestfile {mFile_2} -validate -dir "{install_path}"'
 
-        log_message("开始验证第一部分游戏文件（1/2）...", "info")
-        run_command_live(cmd1, download_mode)
+    log_message("开始验证第一部分游戏文件（1/2）...", "info")
+    run_command_live(cmd1, download_mode)
 
-        log_message("开始验证第二部分游戏文件（2/2）...", "info")
-        run_command_live(cmd2, download_mode)
+    log_message("开始验证第二部分游戏文件（2/2）...", "info")
+    run_command_live(cmd2, download_mode)
 
-        log_message("🎉 验证完整性全部完成！", "success")
-        
-        # 补丁由主线程调用
-        root.after(100, lambda: AddPatchGUI(version, install_path))
+    log_message("🎉 验证完整性全部完成！", "success")
+    
+    # 补丁由主线程调用
+    root.after(100, lambda: AddPatchGUI(version, install_path))
 
-        start_button.config(text="验证完整性")
+    start_button.config(text="验证完整性")
 
 def download_game(folder, version):
     threading.Thread(target=run_download, args=(folder, version), daemon=True).start()
@@ -464,7 +511,7 @@ def run_forwarding():
 
     ttk.Label(top, text="请选择联机版本：").pack(pady=(10, 5))
 
-    version_var = tk.StringVar(value="y5y8")
+    version_var = tk.StringVar(value="y1y4")
     ttk.Radiobutton(top, text="Y1-Y4 版本", variable=version_var, value="y1y4").pack()
     ttk.Radiobutton(top, text="Y5-Y8 版本", variable=version_var, value="y5y8").pack()
 
@@ -511,8 +558,9 @@ def show_route_to_log():
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.geometry("600x600")
-    root.title("彩虹六号旧版本下载器 By Fuzzys QQ群：439523286")
+    root.geometry("650x650")
+    root.iconbitmap("lib\\icon.ico")
+    root.title("彩虹六号旧版本下载器v2.2 By Fuzzys QQ群：439523286")
     root.grid_rowconfigure(4, weight=1)
     root.grid_columnconfigure(1, weight=1)
     
@@ -521,7 +569,7 @@ if __name__ == "__main__":
     root.config(menu=menu_bar)
     online_menu = tk.Menu(menu_bar, tearoff=0)
     online_menu.add_command(label="安装联机VPN", command=lambda: subprocess.Popen("lib\\openvpn-install-2.4.8-I602-Win10.exe", shell=True))
-    online_menu.add_command(label="查看搜房记录", command=lambda: webbrowser.open_new("http://1.14.70.62/r6"))
+    online_menu.add_command(label="查看上海节点搜房记录", command=lambda: webbrowser.open_new("http://43.142.178.16:2333/"))
     online_menu.add_command(label="启动联机转发", command=run_forwarding)
     online_menu.add_command(label="测试到房主延迟", command=ask_ping_ip)
     online_menu.add_command(label="查看当前路由", command=show_route_to_log)
@@ -531,10 +579,12 @@ if __name__ == "__main__":
     
     modifier_menu = tk.Menu(menu_bar, tearoff=0)
     modifier_menu.add_command(label="启动Y1-Y4修改器", command=lambda: subprocess.Popen("lib\\R6_Liberator_0.0.0.22.exe", shell=True))
-    modifier_menu.add_command(label="启动Y5修改器", command=lambda: subprocess.Popen("lib\\Y5_xiu_gai_qi.exe", shell=True))
+    modifier_menu.add_command(label="启动Y5模式修改器", command=lambda: subprocess.Popen("lib\\Y5_xiu_gai_qi.exe", shell=True))
+    modifier_menu.add_command(label="启动Y5S1皮肤全解", command=lambda: subprocess.Popen("lib\\R6S_VoidEdge.exe", shell=True))
+    modifier_menu.add_command(label="完整版缩小工具", command=lambda: subprocess.Popen("lib\\shears.exe", shell=True))
     xiugaiqi_tishi = "建好房间后房主展开地图模式双击最终选项即可\nY5修改器同理，选好后需要点击Send to Siege"
     modifier_menu.add_command(label="使用提示", command=lambda: [messagebox.showinfo("提示", xiugaiqi_tishi),log_message(xiugaiqi_tishi)])
-    menu_bar.add_cascade(label="修改器", menu=modifier_menu)
+    menu_bar.add_cascade(label="修改工具", menu=modifier_menu)
 
     about_menu = tk.Menu(menu_bar, tearoff=0)
     about_menu.add_command(label="作者：Fuzzys_cn", command=lambda: [messagebox.showinfo("作者主页", "B站ID：Fuzzys_cn\nQQ群：439523286"),webbrowser.open_new("https://space.bilibili.com/22525010")])
@@ -542,11 +592,11 @@ if __name__ == "__main__":
     about_menu.add_command(label="访问R6聊天室", command=lambda: webbrowser.open_new("https://chat.002.hk/R6Tools-chat/"))
     about_menu.add_separator()
     about_menu.add_command(label="捐助开发", command=lambda: os.startfile("lib\\zanzhu.png"))
-    about_menu.add_command(label="程序版本：v2.1", command=lambda: messagebox.showinfo("版本信息", "当前版本：v2.1 \n获取最新信息请加入QQ群：439523286"))
+    about_menu.add_command(label="程序版本：v2.2", command=lambda: messagebox.showinfo("版本信息", "当前版本：v2.2 \n获取最新信息请加入QQ群：439523286"))
     menu_bar.add_cascade(label="关于", menu=about_menu)
 
     ttk.Label(root, text="请选择安装文件夹：").grid(row=1, column=0)
-    entry0 = ttk.Entry(root, width=37)
+    entry0 = ttk.Entry(root, width=42)
     entry0.grid(row=1, column=1)
     entry0.insert(0, "安装路径必须是纯英文且没有空格")
 
@@ -558,7 +608,7 @@ if __name__ == "__main__":
     version_display_map = {k: f"{k} {v[4]+v[9]}" for k, v in version_map.items()}
     version_names = list(version_display_map.values())
     version_var = tk.StringVar()
-    entry1 = ttk.Combobox(root, textvariable=version_var, values=version_names, state="readonly", width=35)
+    entry1 = ttk.Combobox(root, textvariable=version_var, values=version_names, state="readonly", width=40)
     entry1.grid(row=2, column=1)
     entry1.set(version_display_map["Y3S1"])  # 设置默认名称
     start_button = ttk.Button(root, text='开始下载')
@@ -579,7 +629,7 @@ if __name__ == "__main__":
             else:
                 start_button.config(text="验证完整版")
 
-    slim_check = ttk.Checkbutton(root, text="是否选择精简版，勾选后比完整版少下载70%，但画质较低", variable=download_slim_var, command=toggle_download_text)
+    slim_check = ttk.Checkbutton(root, text="是否选择精简版，勾选后比完整版少下载70%，但画质较低且无开场CG", variable=download_slim_var, command=toggle_download_text)
     slim_check.grid(row=3, column=1, sticky="w", pady=5)
     
     
@@ -596,14 +646,13 @@ if __name__ == "__main__":
     text.tag_config("warn", foreground="orange")
     text.grid(row=4, columnspan=3, sticky="nsew")
     
-    
-    threading.Thread(target=check_dotnet_runtime, daemon=True).start()  # 启动时后台检测.net
+    check_dotnet_runtime()  # 第一次启动时后台检测.net 取消多线程执行 避免UI卡住！
     show_help()
 
     progress_label = ttk.Label(root, text="进度：0% | 已用时间：--:-- ")
     progress_label.grid(row=5, columnspan=3)
     progress_var = tk.DoubleVar()
-    progressbar = ttk.Progressbar(root, variable=progress_var, orient="horizontal", length=500, mode="determinate")
+    progressbar = ttk.Progressbar(root, variable=progress_var, orient="horizontal", length=625, mode="determinate")
     progressbar.grid(row=6, columnspan=3, pady=(0, 10))
     speed_label = ttk.Label(root)
     speed_label.grid(row=7, columnspan=3)
