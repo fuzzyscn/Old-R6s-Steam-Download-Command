@@ -18,42 +18,45 @@ log_lines = []  # 用于缓存所有处理过的 line
 start_time = time.time()  # 在下载开始时记录
 download_mode = True
 version_map = {
-    "Y1S0" : ["r6_y1s0_377237", "r6_y1s0_359551", 7, 0, "2015年初代 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "8358812283631269928", "3893422760579204530", "完整版大小 14.2 GB "],
-    "Y1S1" : ["r6_y1s1_377237", "r6_y1s1_359551", 7, 0, "墨冰行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5188997148801516344", "7932785808040895147", "完整版大小 16.7 GB "],
-    "Y1S2" : ["r6_y1s2_377237", "r6_y1s2_359551", 7, 0, "尘土战线 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "2303064029242396590", "2206497318678061176", "完整版大小 20.9 GB "],
-    "Y1S3" : ["r6_y1s3_377237", "r6_y1s3_359551", 7, 0, "骷髅雨行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "5819137024728546741", "5851804596427790505", "完整版大小 25.1 GB "],
-    "Y1S4" : ["r6_y1s4_377237", "r6_y1s4_359551", 7, 0, "赤鸦行动 ", "Plazas\\PLAZA_BO", "RainbowSixGame.exe", "3576607363557872807", "8569920171217002292", "完整版大小 28.5 GB "],
-    "Y2S1" : ["r6_y2s1_377237", "r6_y2s1_359551", 7, 0, "丝绒壳行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "2248734317261478192", "8006071763917433748", "完整版大小 33.2 GB "],
-    "Y2S2" : ["r6_y2s2_377237", "r6_y2s2_359551", 7, 0, "健康行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5875987479498297665", "708773000306432190", "完整版大小 34 GB "],
-    "Y2S3" : ["r6_y2s3_377237", "r6_y2s3_359551", 7, 0, "血兰花行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6708129824495912434", "1613631671988840841", "完整版大小 34.3 GB "],
-    "Y2S4" : ["r6_y2s4_377237", "r6_y2s4_359551", 7, 0, "白噪声行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8748734086032257441", "4221297486420648079", "完整版大小 48.7 GB "],
-    "Y3S1" : ["r6_y3s1_377237", "r6_y3s1_359551", 7, 0, "奇美拉行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5071357104726974256", "4701787239566783972", "完整版大小 58.8 GB "],
-    "Y3S2" : ["r6_y3s2_377237", "r6_y3s2_359551", 7, 0, "备战行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6507886921175556869", "8765715607275074515", "完整版大小 63.3 GB "],
-    "Y3S3" : ["r6_y3s3_377237", "r6_y3s3_359551", 7, 0, "暗空行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "5562094852451837435", "7781202564071310413", "完整版大小 72.6 GB "],
-    "Y3S4" : ["r6_y3s4_377237", "r6_y3s4_359551", 7, 0, "风城行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "6502258854032233436", "7659555540733025386", "完整版大小 76.9 GB "],
-    "Y4S1" : ["r6_y4s1_377237", "r6_y4s1_359551", 7, 0, "燃烧地平线 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "8356277316976403078", "5935578581006804383", "完整版大小 59.7 GB "],
-    "Y4S2" : ["r6_y4s2_377237", "r6_y4s2_359551", 7, 0, "幻镜行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "693082837425613508", "5408324128694463720", "完整版大小 67.1 GB "],
-    "Y4S3" : ["r6_y4s3_377237", "r6_y4s3_359551", 7, 0, "余烬重燃行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "3546781236735558235", "7869081741739849703", "完整版大小 69.6 GB "],
-    "Y4S4" : ["r6_y4s4_377237", "r6_y4s4_359551", 7, 0, "幻变潮汐行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "299124516841461614", "1842268638395240106", "完整版大小 75.2 GB "],
-    "Y5S1" : ["r6_y5s1_377237", "r6_y5s1_359551", 7, 0, "虚空边境行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4736360397583523381", "6296533808765702678", "完整版大小 74.3 GB "],
-    "Y5S2" : ["r6_y5s2_377237", "r6_y5s2_359551", 7, 0, "钢流行动 ", "Plazas\\PLAZA_NEW", "RainbowSixGame.exe", "4367817844736324940", "893971391196952070", "完整版大小 81.3 GB "],
-    "Y5S3" : ["r6_y5s3_377237", "r6_y5s3_359551", 9, 1, "暗影传承行动 ", "Plazas\\Y5S3", "RainbowSix.bat", "85893637567200342", "3089981610366186823", "支持全皮肤和地图编辑器 "],
-    "Y5S4" : ["r6_y5s4_377237", "r6_y5s4_359551", 9, 1, "霓虹黎明行动 ", "Plazas\\Y5S4", "RainbowSix.bat", "3390446325154338855", "6947060999143280245", "支持全皮肤和地图编辑器 "],
-    "Y6S1" : ["r6_y6s1_377237", "r6_y6s1_359551", 12, 0, "深红劫案行动 ", "Plazas\\CPlay", "RainbowSix.bat", "7890853311380514304", "7485515457663576274", " "],
-    "Y6S2" : ["r6_y6s2_377237", "r6_y6s2_359551", 12, 0, "北极星行动 ", "Plazas\\CPlay", "RainbowSix.bat", "8733653062998518164", "809542866761090243", " "],
-    "Y6S3" : ["r6_y6s3_377237", "r6_y6s3_359551", 11, 0, "晶坚守卫行动 ", "Plazas\\UPCR1", "RainbowSix.bat", "4859695099882698284", "6526531850721822265", " "],
-    "Y6S4" : ["r6_y6s4_377237", "r6_y6s4_359551", 8, 0, "精兵锐器行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "2637055726475611418", "8627214406801860013", " "],
-    "Y7S1" : ["r6_y7s1_377237", "r6_y7s1_359551", 8, 0, "鬼面行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "8323869632165751287", "2178080523228113690", " "],
-    "Y7S2" : ["r6_y7s2_377237", "r6_y7s2_359551", 8, 0, "矢量光影行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "1363132201391540345", "133280937611742404", " "],
-    "Y7S3" : ["r6_y7s3_377237", "r6_y7s3_359551", 8, 0, "残蜂汹涌行动 ", "Plazas\\UPCR2_NEW", "RainbowSix.bat", "6425223567680952075", "5906302942203575464", " "],
-    "Y7S4" : ["r6_y7s4_377237", "r6_y7s4_359551", 9, 1, "烈日突袭行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "4466027729495813039", "1819898955518120444", " "],
-    "Y8S1" : ["r6_y8s1_377237", "r6_y8s1_359551", 9, 1, "头号指令行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "3275824905781062648", "5863062164463920572", " "],
-    "Y8S2" : ["r6_y8s2_377237", "r6_y8s2_359551", 9, 1, "恐惧因素行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "3050554908913191669", "1575870740329742681", "全干员孤狼猎恐"],
-    "Y8S3" : ["r6_y8s3_377237", "r6_y8s3_359551", 9, 1, "开路先锋行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7845616952346988253", "7492642056657673136", "没有解锁全干员"],
-    "Y8S4" : ["r6_y8s4_377237", "r6_y8s4_359551", 9, 1, "极度深寒行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7646647065987620875", "4957295777170965935", "未测试 不推荐下载"],
-    "Y9S1" : ["r6_y9s1_377237", "r6_y9s1_359551", 9, 1, "绝命征兆行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "1959067516419454682", "1140469899661941149", "未测试 不推荐下载"],
-    "Y9S4" : ["r6_y9s4_377237", "r6_y9s4_359551", 9, 1, "碰撞行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "7684058120163063592", "2666276619654974788", "未测试 不推荐下载"],
-    "Y10S2" : ["r6_y10s2_377237", "r6_y10s2_359551", 9, 1, "围攻X 破晓行动 ", "Plazas\\Y8SX", "RainbowSix.bat", "104322460841049394", "2774763980088642828", "未测试 不推荐下载"],
+    "Y1S0" : [8, 0, "2015年初代 ", "Plazas\\PLAZA_BO", "8394183851197739981", "8358812283631269928", "3893422760579204530", "完整版大小 14.2 GB "],
+    "Y1S1" : [8, 0, "墨冰行动 ", "Plazas\\PLAZA_BO", "3756048967966286899", "5188997148801516344", "7932785808040895147", "完整版大小 16.7 GB "],
+    "Y1S2" : [8, 0, "尘土战线 ", "Plazas\\PLAZA_BO", "1338949402410764888", "2303064029242396590", "2206497318678061176", "完整版大小 20.9 GB "],
+    "Y1S3" : [8, 0, "骷髅雨行动 ", "Plazas\\PLAZA_BO", "3267970968757091405", "5819137024728546741", "5851804596427790505", "完整版大小 25.1 GB "],
+    "Y1S4" : [8, 0, "赤鸦行动 ", "Plazas\\PLAZA_BO", "1825939060444887403", "3576607363557872807", "8569920171217002292", "完整版大小 28.5 GB "],
+    "Y2S1" : [10, 0, "丝绒壳行动 ", "Plazas\\Y1SX_Y6S2", "3196596628759979362", "2248734317261478192", "8006071763917433748", "完整版大小 33.2 GB "],
+    "Y2S2" : [10, 0, "健康行动 ", "Plazas\\Y1SX_Y6S2", "7497579858536910279", "5875987479498297665", "708773000306432190", "完整版大小 34 GB "],
+    "Y2S3" : [10, 0, "血兰花行动 ", "Plazas\\Y1SX_Y6S2", "6420469519659049757", "6708129824495912434", "1613631671988840841", "完整版大小 34.3 GB "],
+    "Y2S4" : [10, 0, "白噪声行动 ", "Plazas\\Y1SX_Y6S2", "1118649577165385479", "8748734086032257441", "4221297486420648079", "完整版大小 48.7 GB "],
+    "Y3S1" : [10, 0, "奇美拉行动 ", "Plazas\\Y1SX_Y6S2", "1668513364192382097", "5071357104726974256", "4701787239566783972", "完整版大小 58.8 GB "],
+    "Y3S2" : [10, 0, "备战行动 ", "Plazas\\Y1SX_Y6S2", "204186978012641075", "6507886921175556869", "8765715607275074515", "完整版大小 63.3 GB "],
+    "Y3S3" : [10, 0, "暗空行动 ", "Plazas\\Y1SX_Y6S2", "6431001239225997495", "5562094852451837435", "7781202564071310413", "完整版大小 72.6 GB "],
+    "Y3S4" : [10, 0, "风城行动 ", "Plazas\\Y1SX_Y6S2", "2243348760021617592", "6502258854032233436", "7659555540733025386", "完整版大小 76.9 GB "],
+    "Y4S1" : [10, 0, "燃烧地平线 ", "Plazas\\Y1SX_Y6S2", "4107080515154236795", "8356277316976403078", "5935578581006804383", "完整版大小 59.7 GB "],
+    "Y4S2" : [10, 0, "幻镜行动 ", "Plazas\\Y1SX_Y6S2", "4107080515154236795", "693082837425613508", "5408324128694463720", "完整版大小 67.1 GB "],
+    "Y4S3" : [10, 0, "余烬重燃行动 ", "Plazas\\Y1SX_Y6S2", "4319184561394137009", "3546781236735558235", "7869081741739849703", "完整版大小 69.6 GB "],
+    "Y4S4" : [10, 0, "幻变潮汐行动 ", "Plazas\\Y1SX_Y6S2", "6048763664997452513", "299124516841461614", "1842268638395240106", "完整版大小 75.2 GB "],
+    "Y5S1" : [10, 0, "虚空边境行动 ", "Plazas\\Y1SX_Y6S2", "5178634099570922382", "4736360397583523381", "6296533808765702678", "完整版大小 74.3 GB "],
+    "Y5S2" : [10, 0, "钢流行动 ", "Plazas\\Y1SX_Y6S2", "1430519549301269175", "4367817844736324940", "893971391196952070", "完整版大小 81.3 GB "],
+    "Y5S3" : [10, 0, "暗影传承行动 ", "Plazas\\Y1SX_Y6S2", "3569318872166878802", "85893637567200342", "3089981610366186823", " "],
+    "Y5S4" : [10, 0, "霓虹黎明行动 ", "Plazas\\Y1SX_Y6S2", "5031819270211938768", "3390446325154338855", "6947060999143280245", " "],
+    "Y6S1" : [10, 0, "深红劫案行动 ", "Plazas\\Y1SX_Y6S2", "824862967535275776", "7890853311380514304", "7485515457663576274", " "],
+    "Y6S2" : [10, 0, "北极星行动 ", "Plazas\\Y1SX_Y6S2", "4516306853792344149", "2525708706057497155", "6304700868033912207", " "],
+    "Y6S3" : [9, 0, "晶坚守卫行动 ", "Plazas\\Y6S3", "464131791023348127", "4859695099882698284", "6526531850721822265", " "],
+    "Y6S4" : [8, 1, "精兵锐器行动 ", "Plazas\\Y6S4_Y8SX", "3789012815826415451", "2637055726475611418", "8627214406801860013", " "],
+    "Y7S1" : [8, 1, "鬼面行动 ", "Plazas\\Y6S4_Y8SX", "1017088518760777239", "8323869632165751287", "2178080523228113690", " "],
+    "Y7S2" : [8, 1, "矢量光影行动 ", "Plazas\\Y6S4_Y8SX", "4980280656167053251", "1363132201391540345", "133280937611742404", " "],
+    "Y7S3" : [8, 1, "残蜂汹涌行动 ", "Plazas\\Y6S4_Y8SX", "4129687480932413059", "6425223567680952075", "5906302942203575464", " "],
+    "Y7S4" : [8, 1, "烈日突袭行动 ", "Plazas\\Y6S4_Y8SX", "991763536720350080", "4466027729495813039", "1819898955518120444", " "],
+    "Y8S1" : [8, 1, "头号指令行动 ", "Plazas\\Y6S4_Y8SX", "1346138729532470037", "3275824905781062648", "5863062164463920572", " "],
+    "Y8S2" : [8, 1, "恐惧因素行动 ", "Plazas\\Y6S4_Y8SX", "3089387919119201428", "3050554908913191669", "1575870740329742681", "全干员孤狼猎恐"],
+    "Y8S3" : [8, 1, "开路先锋行动 ", "Plazas\\Y6S4_Y8SX", "6180693257475846771", "7845616952346988253", "7492642056657673136", "没有解锁全干员"],
+    "Y8S4" : [8, 1, "极度深寒行动 ", "Plazas\\Y6S4_Y8SX", "7317912690472443034", "7646647065987620875", "4957295777170965935", "可播放Demo"],
+    "Y9S1" : [8, 1, "绝命征兆行动 ", "Plazas\\Y6S4_Y8SX", "7765579480993106151", "1959067516419454682", "1140469899661941149", "可播放Demo"],
+    "Y9S2" : [8, 1, "新鲜血液行动 ", "Plazas\\Y6S4_Y8SX", "6882482091838503762", "6874184890918352263", "2171250367116101899", "可播放Demo"],
+    "Y9S3" : [8, 1, "双壳行动 ", "Plazas\\Y6S4_Y8SX", "1982516469324419999", "2624390684942642488", "2158552647424644920", "可播放Demo"],
+    "Y9S4" : [8, 1, "交锋行动 ", "Plazas\\Y6S4_Y8SX", "4944855870642690023", "7684058120163063592", "2666276619654974788", "可播放Demo"],
+    "Y10S1" : [8, 1, "围攻X 准备阶段 ", "Plazas\\Y6S4_Y8SX", "2607280485967462998", "6764165128845305373", "8542711540144632540", "可播放Demo"],
+    "Y10S2" : [8, 1, "围攻X 破晓行动 ", "Plazas\\Y6S4_Y8SX", "3507602244568617339", "104322460841049394", "2774763980088642828", "可播放Demo"],
 }
 
 def get_real_time_net_speed(interval=1):
@@ -193,7 +196,7 @@ def AddPatchGUI(version, game_path):
             nickname = "Player"
 
         nickname += "-" + version
-        patch_path = os.path.join("lib", version_map[version][5])
+        patch_path = os.path.join("lib", version_map[version][3])
         patch_files = os.listdir(patch_path)
         folder_count = 0
         file_count = 0
@@ -214,11 +217,11 @@ def AddPatchGUI(version, game_path):
                 if file.endswith(".ini") and file != "steam_emu.ini":
                     with open(dst, 'r') as f:
                         content = f.read()
-                    content = content.replace("CHANGEGAMENAME", nickname).replace("CHANGEUSERNAME", nickname)
+                    content = content.replace("CHANGEGAMENAME", nickname).replace("ThrowbackUser", nickname)
                     with open(dst, 'w') as f:
                         f.write(content)
 
-                if file.endswith("HeliosLoader.json"):
+                if file.endswith("HeliosLoader.json"):#HM使用
                     with open(dst, 'r') as f:
                         content = f.read()
                     content = content.replace("CHANGEUSERNAME", nickname)
@@ -226,8 +229,8 @@ def AddPatchGUI(version, game_path):
                         f.write(content)
 
         # 完整性核验
-        expected_file_count = version_map[version][2]
-        expected_folder_count = version_map[version][3]
+        expected_file_count = version_map[version][0]
+        expected_folder_count = version_map[version][1]
         if file_count != expected_file_count:
             log_message("❌ 补丁文件数量异常，请关闭杀毒软件并重新解压下载器", "error")
         elif folder_count != expected_folder_count:
@@ -241,9 +244,9 @@ def AddPatchGUI(version, game_path):
             log_message(f"精简版补丁安装成功！", "success")
 
         # 提示是否启动游戏
-        exe_name = version_map[version][6]
+        exe_name = "RainbowSix.bat"
         exe_path = os.path.join(game_path, exe_name)
-        if not os.path.exists(exe_path):  # 如果主启动文件不存在，试试备用名
+        if not os.path.exists(exe_path):  # 如果启动BAT文件不存在，试试备用名
             exe_path = os.path.join(game_path, "rainbowsix.exe")
         if os.path.exists(exe_path):
             if messagebox.askyesno("启动游戏", "补丁已安装完毕，是否启动游戏？"):
@@ -274,8 +277,8 @@ def run_download(dir, version):
     start_time = time.time()
     
     install_path = dir
-    manifest1 = version_map[version][7]
-    manifest2 = version_map[version][8]
+    manifest1 = version_map[version][5]
+    manifest2 = version_map[version][6]
     log_message(f"📁 游戏的安装路径: {install_path}")
     log_message(f"🚀 开始下载赛季版本: {version}")
 
@@ -335,8 +338,8 @@ def run_verify(dir, version):
     start_time = time.time()
 
     install_path = dir
-    manifest1 = version_map[version][7]
-    manifest2 = version_map[version][8]
+    manifest1 = version_map[version][5]
+    manifest2 = version_map[version][6]
     log_message(f"📁 游戏的安装路径: {install_path}")
     log_message(f"🚀 开始验证完整性: {version}")
 
@@ -578,13 +581,13 @@ if __name__ == "__main__":
     menu_bar.add_cascade(label="联机工具", menu=online_menu)
     
     modifier_menu = tk.Menu(menu_bar, tearoff=0)
-    modifier_menu.add_command(label="启动Y1-Y4修改器", command=lambda: subprocess.Popen("lib\\R6_Liberator_0.0.0.22.exe", shell=True))
-    modifier_menu.add_command(label="启动Y5模式修改器", command=lambda: subprocess.Popen("lib\\Y5_xiu_gai_qi.exe", shell=True))
-    modifier_menu.add_command(label="启动Y5S1皮肤全解", command=lambda: subprocess.Popen("lib\\R6S_VoidEdge.exe", shell=True))
+    #modifier_menu.add_command(label="启动Y1-Y4修改器", command=lambda: subprocess.Popen("lib\\R6_Liberator_0.0.0.22.exe", shell=True))
+    #modifier_menu.add_command(label="启动Y5模式修改器", command=lambda: subprocess.Popen("lib\\Y5_xiu_gai_qi.exe", shell=True))
+    #modifier_menu.add_command(label="启动Y5S1皮肤全解", command=lambda: subprocess.Popen("lib\\R6S_VoidEdge.exe", shell=True))
     modifier_menu.add_command(label="完整版缩小工具", command=lambda: subprocess.Popen("lib\\shears.exe", shell=True))
-    xiugaiqi_tishi = "建好房间后房主展开地图模式双击最终选项即可\nY5修改器同理，选好后需要点击Send to Siege"
+    xiugaiqi_tishi = "选择游戏文件夹，取消勾选不同画质\n点击Shear!即可删除对应的贴图文件！"
     modifier_menu.add_command(label="使用提示", command=lambda: [messagebox.showinfo("提示", xiugaiqi_tishi),log_message(xiugaiqi_tishi)])
-    menu_bar.add_cascade(label="修改工具", menu=modifier_menu)
+    menu_bar.add_cascade(label="缩小工具", menu=modifier_menu)
 
     about_menu = tk.Menu(menu_bar, tearoff=0)
     about_menu.add_command(label="作者：Fuzzys_cn", command=lambda: [messagebox.showinfo("作者主页", "B站ID：Fuzzys_cn\nQQ群：439523286"),webbrowser.open_new("https://space.bilibili.com/22525010")])
@@ -605,7 +608,7 @@ if __name__ == "__main__":
     select_dir_button.config(state="disabled")  # 初始禁用
 
     ttk.Label(root, text="请选择赛季版本：").grid(row=2, column=0)
-    version_display_map = {k: f"{k} {v[4]+v[9]}" for k, v in version_map.items()}
+    version_display_map = {k: f"{k} {v[2]+v[7]}" for k, v in version_map.items()}
     version_names = list(version_display_map.values())
     version_var = tk.StringVar()
     entry1 = ttk.Combobox(root, textvariable=version_var, values=version_names, state="readonly", width=40)
@@ -629,7 +632,7 @@ if __name__ == "__main__":
             else:
                 start_button.config(text="验证完整版")
 
-    slim_check = ttk.Checkbutton(root, text="是否选择精简版，勾选后比完整版少下载70%，但画质较低且无开场CG", variable=download_slim_var, command=toggle_download_text)
+    slim_check = ttk.Checkbutton(root, text="是否选择精简版，勾选后比完整版少下载75%，但画质较低且无开场CG", variable=download_slim_var, command=toggle_download_text)
     slim_check.grid(row=3, column=1, sticky="w", pady=5)
     
     
